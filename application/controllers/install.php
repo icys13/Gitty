@@ -48,7 +48,7 @@ class Install extends CI_Controller {
 			echo 'a';
 		else
 			//建立不成功
-			print_r($msg);
+			print_r($msg['error']);
 	}
 }
 

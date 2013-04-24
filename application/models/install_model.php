@@ -68,18 +68,91 @@ class Install_model extends CI_Model {
 	public function install()
 	{
 		$con = @mysql_connect($this->hostname,$this->username,$this->password);
-		mysql_select_db($this->database,$con);
-		$sql = 'adsf';
-		if(@mysql_query($sql))
+
+		// 创建数据库
+		if(mysql_query("CREATE DATABASE {$this->database}",$con))
 		{
-			mysql_close($con);
-			$msg['flag'] = TRUE;
+			mysql_select_db($this->database,$con);
+
+			// 创建用户表
+			$user_sql = 'CREATE TABLE users(
+					username VARCHAR(20) NOT NULL,
+					email VARCHAR(50) NOT NULL ,
+					ssh_key TEXT,
+					date DATETIME NOT NULL,
+					location VARCHAR(50),
+					img BLOB,
+					admin BOOLEAN NOT NULL default FALSE,
+					PRIMARY KEY (username)
+				)';
+
+			// 创建项目表
+			$res_sql = 'CREATE TABLE respositories(	
+					res_name VARCHAR(20) NOT NULL,
+					owner VARCHAR(20) NOT NULL,
+					creator VARCHAR(20) NOT NULL,
+					PRIMARY KEY (res_name,owner,creator),
+					FOREIGN KEY (owner) REFERENCES users(username),
+					FOREIGN KEY (creator) REFERENCES users(username)
+				)';
+
+			// 创建 fork 表
+			$fork_sql = 'CREATE TABLE forks(
+					username VARCHAR(20) NOT NULL,
+					res_name VARCHAR(20) NOT NULL,
+					creator VARCHAR(20) NOT NULL,
+					PRIMARY KEY (username,res_name),
+					FOREIGN KEY (username) REFERENCES users(username),
+					FOREIGN KEY (res_name) REFERENCES respositories(res_name),
+					FOREIGN KEY (creator)  REFERENCES users(username)
+				)';
+
+			// 创建 create 表
+			$create_sql = 'CREATE TABLE creates(
+					username VARCHAR(20) NOT NULL,
+					res_name VARCHAR(20) NOT NULL,
+					PRIMARY KEY (username,res_name),
+					FOREIGN KEY (username) REFERENCES users(username),
+					FOREIGN KEY (res_name) REFERENCES respositories(res_name)
+				)';
+			
+			// 创建 participate 表
+			$parti_sql = 'CREATE TABLE participates(
+					username VARCHAR(20) NOT NULL,
+					res_name VARCHAR(20) NOT NULL,
+					creator VARCHAR(20) NOT NULL,
+					PRIMARY KEY (username,res_name),
+					FOREIGN KEY (username) REFERENCES users(username),
+					FOREIGN KEY (creator) REFERENCES users(username),
+					FOREIGN KEY (res_name) REFERENCES respositories(res_name)
+				)';
+
+			// 创建 branches 表
+			// 创建 tags 表
+			// 创建 commits 表
+			// 创建 trees 表
+			// 创建 blobs 表
+
+			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql))
+			{
+				mysql_close($con);
+				$msg['flag'] = TRUE;
+				return $msg;
+			}
+			else
+			{
+				$msg['error']['remind'] = mysql_error();
+				mysql_close($con);
+				$msg['flag'] = FALSE;
+				return $msg;
+			}
+		}
+		else
+		{
+			$msg['error']['remind'] = mysql_error();
+			$msg['flag'] = FALSE;
 			return $msg;
 		}
-		mysql_close($con);
-		$msg['error']['remind'] = mysql_error();
-		$msg['flag'] = FALSE;
-		return $msg;
 	}
 
 	public function drop()
