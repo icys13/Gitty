@@ -26,8 +26,8 @@ class Install_model extends CI_Model {
 		$con = @mysql_connect($this->hostname,$this->username,$this->password);
 		if(!$con)
 		{
-			$msg['error']['remind'] = '<p>数据库连接失败:(</p><p>请检查数据库参数hostname,username,password是否正确配置!</p>';
-			$msg['error']['cover'] = FALSE;
+			$msg['remind']['error'] = '<p>数据库连接失败:(</p><p>请检查数据库参数hostname,username,password是否正确配置!</p>';
+			$msg['remind']['cover'] = FALSE;
 			$msg['flag']= FALSE;
 			return $msg;
 		}
@@ -35,8 +35,8 @@ class Install_model extends CI_Model {
 		{
 			if(@mysql_select_db($this->database,$con))
 			{
-				$msg['error']['remind'] = "<p>数据库{$this->database}已经存在是否覆盖并安装?</p>";
-				$msg['error']['cover'] = TRUE;
+				$msg['remind']['error'] = "<p>数据库{$this->database}已经存在是否覆盖并安装?</p>";
+				$msg['remind']['cover'] = TRUE;
 				$msg['flag'] = FALSE;
 				mysql_close($con);
 				return $msg;
@@ -77,9 +77,10 @@ class Install_model extends CI_Model {
 			// 创建用户表
 			$user_sql = 'CREATE TABLE users(
 					username VARCHAR(20) NOT NULL,
+					password VARCHAR(32) NOT NULL,
 					email VARCHAR(50) NOT NULL ,
 					ssh_key TEXT,
-					date DATETIME NOT NULL,
+					date DATE NOT NULL,
 					location VARCHAR(50),
 					img BLOB,
 					admin BOOLEAN NOT NULL default FALSE,
@@ -141,7 +142,7 @@ class Install_model extends CI_Model {
 			}
 			else
 			{
-				$msg['error']['remind'] = mysql_error();
+				$msg['remind']['error'] = mysql_error();
 				mysql_close($con);
 				$msg['flag'] = FALSE;
 				return $msg;
@@ -149,7 +150,7 @@ class Install_model extends CI_Model {
 		}
 		else
 		{
-			$msg['error']['remind'] = mysql_error();
+			$msg['remind']['error'] = mysql_error();
 			$msg['flag'] = FALSE;
 			return $msg;
 		}
