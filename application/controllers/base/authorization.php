@@ -3,12 +3,13 @@
 class Authorization extends CI_Controller {
 
 
+	var $username;
 	// 检查用户是否登录
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->library('session');
-		$username = $this->session->userdata('username');
+		$this->username = $this->session->userdata('username');
 
 		if(!$this->session->userdata('username') || !$this->session->userdata('log_in'))
 			redirect(site_url('base/signup'));

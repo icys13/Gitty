@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed!');
 
-require_once(dirname(dirname(__FILE__)).'/base/authorization.php');
+require_once(dirname(dirname(__FILE__)).'/base/users.php');
 
-class Index extends Authorization {
+class Index extends Users {
 
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class Index extends Authorization {
 	public function index()
 	{
 		$this->load->view('admin/index');
-	}
+	}	
 }
 
 /* End of file index.php */

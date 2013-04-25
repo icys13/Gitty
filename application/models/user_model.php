@@ -85,9 +85,39 @@ class User_model extends CI_Model {
 		return FALSE;
 	}
 
+	public function account_update($username,$data)
+	{
+		$this->db->where('username',$username);
+		$this->db->update('users',$data);
+		return TRUE;
+	}
+
+	public function select_profile($username)
+	{
+		$this->db->select('full_name,location');
+		$query = $this->db->get_where('users',array('username' => $username));
+		$result = $query->result();
+		return (array)$result[0];
+	}
+
+	public function select_email($username)
+	{
+		$this->db->select('email');
+		$query = $this->db->get_where('users',array('username' => $username));
+		$result = $query->result();
+		return (array)$result[0];
+	}
+
+	public function select_ssh_key($username)
+	{
+		$this->db->select('ssh_key');
+		$query = $this->db->get_where('users',array('username' => $username));
+		$result = $query->result();
+		return (array)$result[0];
+	}
+
 	public function signup($data = array())
 	{
-		$msg = array();
 		if(preg_match('/^[a-zA-Z0-9\_]{5,20}$/',$data['username']) && preg_match('/^[a-zA-Z0-9\_]{6,20}$/',$data['password']))
 		{
 			$query = $this->db->query('SELECT username,password FROM users LIMIT 1');

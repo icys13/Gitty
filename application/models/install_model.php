@@ -77,8 +77,9 @@ class Install_model extends CI_Model {
 			// 创建用户表
 			$user_sql = 'CREATE TABLE users(
 					username VARCHAR(20) NOT NULL,
+					email VARCHAR(50) NOT NULL,
 					password VARCHAR(32) NOT NULL,
-					email VARCHAR(50) NOT NULL ,
+					full_name VARCHAR(20) NOT NULL ,
 					ssh_key TEXT,
 					date DATE NOT NULL,
 					location VARCHAR(50),
