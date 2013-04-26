@@ -107,6 +107,56 @@ class Users extends Authorization {
 	// ssh_key 公钥
 	public function public_key()
 	{
+		$data = $this->user_model->select_ssh_key($this->username);
+		$msg['admin'] = $this->session->userdata('admin');
+		if(empty($data['ssh_key']))
+		{
+			$this->load->view('header');
+			$this->load->view('base/key_empty',$msg);
+			$this->load->view('footer');
+		}
+		else
+		{
+			$msg['ssh_key'] = $data['ssh_key'];
+			$msg['username'] = $this->username;
+			$this->load->view('header');
+			$this->load->view('base/key_exists',$msg);
+			$this->load->view('footer');
+		}
+	}
+
+	// 创建新的 ssh_key	
+	public function new_key()
+	{
+		$data['ssh_key'] = $this->input->post('ssh_key');
+		if(!empty($data['ssh_key']))
+		{
+			$temp = explode(' ',$data['ssh_key']);
+			$ssh_key = $temp[0].' '.$temp[1];
+			$this->user_model->account_update($this->username,array('ssh_key' => $ssh_key));
+			if($this->session->userdata('admin'))
+				redirect(site_url('admin/index/public_key'));
+			else
+				redirect(site_url('ordinary/index/public_key'));
+		}
+		else
+		{
+			$msg['admin'] = $this->session->userdata('admin');
+			$msg['username'] = $this->username;
+			$this->load->view('header');
+			$this->load->view('base/new_key',$msg);
+			$this->load->view('footer');
+		}
+	}
+
+	// 删除旧 ssh_key
+	public function del_key($username = '')
+	{
+		$this->user_model->account_update($this->username,array('ssh_key' => ''));
+		if($this->session->userdata('admin'))
+			redirect(site_url('admin/index/public_key'));
+		else
+			redirect(site_url('ordinary/index/public_key'));
 	}
 }
 

@@ -32,7 +32,7 @@ class Regist extends CI_Controller {
 			$this->load->view('header');
 			$this->load->view('base/regist');
 			$this->load->view('footer');
-		}
+		 }
 		else
 		{
 			$msg = $this->user_model->check($data);
