@@ -13,6 +13,12 @@ class Index extends Users {
 	{
 		$this->load->view('ordinary/index');
 	}
+
+	// 显示个人信息 full_name & location & join in date
+	private function show_profile()
+	{		
+		$data['date'] = $this->user_model->select_date($this->username);	
+	}
 }
 
 /* End of file index.pho */

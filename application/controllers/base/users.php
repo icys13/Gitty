@@ -38,7 +38,9 @@ class Users extends Authorization {
 		}
 
 		$msg['admin'] = $this->session->userdata('admin');
-		$msg['data'] = $this->user_model->select_profile($this->username);
+		//	$msg['data'] = $this->user_model->select_profile($this->username);
+		$msg['full_name'] = $this->user_model->select_full_name($this->username);
+		$msg['location'] = $this->user_model->select_location($this->username);
 
 		$this->load->view('header');
 		$this->load->view('base/profile',$msg);

@@ -91,12 +91,28 @@ class User_model extends CI_Model {
 		return TRUE;
 	}
 
-	public function select_profile($username)
+	public function select_full_name($username)
 	{
-		$this->db->select('full_name,location');
+		$this->db->select('full_name');
 		$query = $this->db->get_where('users',array('username' => $username));
-		$result = $query->result();
-		return (array)$result[0];
+		$result = $query->row_array();
+		return $result['full_name'];
+	}
+
+	public function select_location($username)
+	{
+		$this->db->select('location');
+		$query = $this->db->get_where('users',array('username' => $username));
+		$result = $query->row_array();
+		return $result['location'];
+	}
+
+	public function select_date($username)
+	{
+		$this->db->select('date');
+		$query =  $this->db->get_where('users',array('username' => $username));
+		$result = $query->row_array();
+		return  $result['date'];
 	}
 
 	public function select_email($username)
