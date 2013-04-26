@@ -15,6 +15,7 @@
 		</div>
 		<div class="form-actions">
 			<input class="btn btn-large btn-primary" name="submit" type="submit" value="登录">
+			<a class="btn btn-large btn-primary" href="<?=base_url()?>index.php/base/regist">注册</a>
 		</div>
 	</form>
 </div>

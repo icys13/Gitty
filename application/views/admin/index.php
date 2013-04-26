@@ -1,1 +1,1 @@
-asdf
+<?=$regist_status?>

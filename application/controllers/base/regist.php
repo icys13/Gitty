@@ -5,6 +5,9 @@ class Regist extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('regist_status_model');
+		if(!$this->regist_status_model->get_status())
+			redirect(site_url('base/signup'));
 	}
 
 	/*

@@ -46,7 +46,10 @@ class Install extends CI_Controller {
 		if($msg['flag'])
 		{
 			// 创建成功
-			redirect(site_url('base/regist'));
+			$msg['error'] = '默认 username:admin<br/>password:123456<br/>email:amdin@admin.com<br/>';
+			$msg['link'] = '<a class="btn btn-large btn-primary" href="'.base_url().'index.php/base/signup">点此登录</a>';
+			$this->load->view('base/readme',$msg);
+			//redirect(site_url('base/regist'));
 		}
 		else
 			//建立不成功

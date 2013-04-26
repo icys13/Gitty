@@ -6,11 +6,16 @@
 <body>
 <?php
 echo $error;
-if($cover)
+if(isset($cover))
 {
-	echo '<input type="button" value="确定" onclick="window.location=\''.site_url('base/install/action').'\'"';
-//	echo '<input type="button" value="asdf" onclick="window.location=\'http://baidu.com\'">';
+	if($cover)
+	{
+		echo '<input type="button" value="确定" onclick="window.location=\''.site_url('base/install/action').'\'"';
+	//	echo '<input type="button" value="asdf" onclick="window.location=\'http://baidu.com\'">';
+	}
 }
+if(isset($link))
+	echo $link;
 ?>
 </body>
 </html>

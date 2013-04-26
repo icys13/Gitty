@@ -77,7 +77,6 @@ class User_model extends CI_Model {
 		$data['password'] = md5($data['password']);
 		unset($data['confirm']);
 		$data['date'] = date('Y-m-d');
-		$data['admin'] = TRUE;
 
 		$query = $this->db->insert_string('users',$data);
 		if($this->db->query($query))
@@ -136,7 +135,7 @@ class User_model extends CI_Model {
 	{
 		if(preg_match('/^[a-zA-Z0-9\_]{5,20}$/',$data['username']) && preg_match('/^[a-zA-Z0-9\_]{6,20}$/',$data['password']))
 		{
-			$query = $this->db->query('SELECT username,password FROM users LIMIT 1');
+			$query = $this->db->query('SELECT username,password FROM users WHERE username="'.$data['username'].'" LIMIT 1');
 			$result = $query->row_array();
 			if($query->num_rows())
 			{

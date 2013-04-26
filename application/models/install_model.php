@@ -89,6 +89,9 @@ class Install_model extends CI_Model {
 					PRIMARY KEY (username)
 				)';
 
+			// 初始化管理员
+			$user_sql_insert = 'INSERT INTO users (username,password,email,date,admin)VALUES("admin","'.md5('123456').'","admin@admin.com","'.date("Y-m-d").'",1)';
+
 			// 创建项目表
 			$res_sql = 'CREATE TABLE respositories(	
 					res_name VARCHAR(20) NOT NULL,
@@ -98,6 +101,15 @@ class Install_model extends CI_Model {
 					FOREIGN KEY (owner) REFERENCES users(username),
 					FOREIGN KEY (creator) REFERENCES users(username)
 				)';
+
+			// 创建 注册检测表
+			$regist_sql = 'CREATE TABLE regist_status(
+				status BOOLEAN NOT NULL DEFAULT TRUE,
+				PRIMARY KEY (status)
+			)';
+
+			// 初始化 regist_status 表
+			$regist_sql_insert = 'INSERT INTO regist_status (status) VALUES (\'1\')';
 
 			// 创建 fork 表
 			$fork_sql = 'CREATE TABLE forks(
@@ -136,7 +148,7 @@ class Install_model extends CI_Model {
 			// 创建 trees 表
 			// 创建 blobs 表
 
-			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql))
+			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql) && mysql_query($regist_sql) && mysql_query($regist_sql_insert)  && mysql_query($user_sql_insert))
 			{
 				mysql_close($con);
 				$msg['flag'] = TRUE;
