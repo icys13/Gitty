@@ -158,6 +158,54 @@ class Users extends Authorization {
 		else
 			redirect(site_url('ordinary/index/public_key'));
 	}
+
+	public function img()
+	{
+		$msg['admin'] = $this->session->userdata('admin');
+		if(!empty($_FILES['img']))
+		{
+			$types = array('jpg','gif','bmp','jpeg','png');
+			if(!in_array(strtolower($this->img_type()),$types))
+			{
+				$msg['error'] = '您只能上传以下类型文件: '.implode(' .',$types);
+				$this->load->view('header');
+				$this->load->view('base/img',$msg);
+				$this->load->view('footer');
+			}
+			else
+			{
+				$data = addslashes(fread(fopen($_FILES['img']['tmp_name'],'r'),filesize($_FILES['img']['tmp_name'])));
+				$this->user_model->account_update($this->username,array('img' => $data,'img_type' => $_FILES['img']['type']));
+				if($this->session->userdata('admin'))
+					redirect(site_url('admin/index/img'));
+				else
+					redirect(site_url('ordinary/index/img'));
+			}
+		}
+		else
+		{
+			$msg['username'] = $this->username;
+			$this->load->view('header');
+			$this->load->view('base/img',$msg);
+			$this->load->view('footer');
+		}
+	}
+
+	private function img_type()
+	{
+		return substr(strrchr($_FILES['img']['name'],'.'),1);
+	}
+
+	public function get_img()
+	{
+		if(isset($_GET['username']))
+		{
+			$img = $this->user_model->select_img($_GET['username']);
+			$type = $this->user_model->select_img_type($_GET['username']);
+			Header("Content-type:{$type['img_type']}");
+			echo $img['img'];
+		}
+	}
 }
 
 /* End of file users.php */

@@ -84,6 +84,7 @@ class Install_model extends CI_Model {
 					date DATE NOT NULL,
 					location VARCHAR(50),
 					img BLOB,
+					img_type VARCHAR(10),
 					admin BOOLEAN NOT NULL default FALSE,
 					PRIMARY KEY (username)
 				)';

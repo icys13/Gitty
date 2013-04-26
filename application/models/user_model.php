@@ -116,6 +116,22 @@ class User_model extends CI_Model {
 		return (array)$result[0];
 	}
 
+	public function select_img_type($username)
+	{
+		$this->db->select('img_type');
+		$query = $this->db->get_where('users',array('username' => $username));
+		$result = $query->result();
+		return (array)$result[0];
+	}
+
+	public function select_img($username)
+	{
+		$this->db->select('img');
+		$query = $this->db->get_where('users',array('username' => $username));
+		$result = $query->result();
+		return (array)$result[0];
+	}
+
 	public function signup($data = array())
 	{
 		if(preg_match('/^[a-zA-Z0-9\_]{5,20}$/',$data['username']) && preg_match('/^[a-zA-Z0-9\_]{6,20}$/',$data['password']))
