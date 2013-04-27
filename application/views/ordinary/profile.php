@@ -25,13 +25,13 @@
 			</div>
 			<ul class="stats cf">
 				<li>
-					<a href=""><strong>0</strong>创建项目</a>
+					<a href=""><strong>0</strong>项目</a>
 				</li>
 				<li>
-					<a href=""><strong>0</strong>克隆项目</a>
+					<a href=""><strong>0</strong>粉丝</a>
 				</li>
 				<li>
-					<a href=""><strong>0</strong>参与项目</a>
+					<a href=""><strong>0</strong>关注</a>
 				</li>
 			</ul>
 		</div>

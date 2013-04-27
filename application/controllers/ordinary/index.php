@@ -15,8 +15,10 @@ class Index extends Users {
 	//	$profile = $this->show_profile();
 		$msg1 = $this->show_profile();
 		$msg1['username'] = $this->username;
+
 		$this->load->view('header');
 		$this->load->view('ordinary/profile',$msg1);
+		$this->load->view('ordinary/repo');
 	//	$this->load->view('ordinary/index');
 		$this->load->view('footer');
 	}
@@ -74,8 +76,9 @@ class Index extends Users {
 		}
 		else
 		{
+			$msg['username'] = $this->username;
 			$this->load->view('header');
-			$this->load->view('ordinary/create_repo');
+			$this->load->view('ordinary/create_repo',$msg);
 			$this->load->view('footer');
 		}
 	}

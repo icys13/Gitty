@@ -93,11 +93,13 @@ class Install_model extends CI_Model {
 			$user_sql_insert = 'INSERT INTO users (username,password,email,date,admin)VALUES("admin","'.md5('123456').'","admin@admin.com","'.date("Y-m-d").'",1)';
 
 			// 创建项目表
-			$res_sql = 'CREATE TABLE respositories(	
+			$res_sql = 'CREATE TABLE repositories(	
 					repo_name VARCHAR(20) NOT NULL,
 					owner VARCHAR(20) NOT NULL,
 					creator VARCHAR(20) NOT NULL,
 					description TEXT,
+					create_date DATE NOT NULL,
+					update_date DATE NOT NULL,
 					PRIMARY KEY (repo_name,owner,creator),
 					FOREIGN KEY (owner) REFERENCES users(username),
 					FOREIGN KEY (creator) REFERENCES users(username)
@@ -119,7 +121,7 @@ class Install_model extends CI_Model {
 					creator VARCHAR(20) NOT NULL,
 					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
-					FOREIGN KEY (repo_name) REFERENCES respositories(repo_name),
+					FOREIGN KEY (repo_name) REFERENCES repositories(repo_name),
 					FOREIGN KEY (creator)  REFERENCES users(username)
 				)';
 
@@ -129,7 +131,7 @@ class Install_model extends CI_Model {
 					repo_name VARCHAR(20) NOT NULL,
 					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
-					FOREIGN KEY (repo_name) REFERENCES respositories(repo_name)
+					FOREIGN KEY (repo_name) REFERENCES repositories(repo_name)
 				)';
 			
 			// 创建 participate 表
@@ -140,7 +142,7 @@ class Install_model extends CI_Model {
 					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
 					FOREIGN KEY (creator) REFERENCES users(username),
-					FOREIGN KEY (repo_name) REFERENCES respositories(repo_name)
+					FOREIGN KEY (repo_name) REFERENCES repositories(repo_name)
 				)';
 
 			// 创建 branches 表
