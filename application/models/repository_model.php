@@ -10,23 +10,50 @@ class Repository_model extends CI_Model {
 
 	public function select_creates($username)
 	{
-		$this->db->select('repo_name');
+		$this->db->select('username,repo_name');
 		$query = $this->db->get_where('creates',array('username' => $username));
-		return $query->result_array();
+		$temp = $query->result_array();
+		$result = array();
+
+		foreach($temp as $item)
+		{
+			$this->db->select('repo_name,creator,description,create_date,update_date');
+			$query = $this->db->get_where('repositories',array('repo_name' => $item['repo_name'],'creator' => $item['username'],'owner' => $item['username']));
+			$result[] = $query->row_array();
+		}
+		return $result;
 	}
 
 	public function select_forks($username)
 	{
-		$this->db->select('repo_name');
+		$this->db->select('repo_name,username');
 		$query = $this->db->get_where('forks',array('username' => $username));
-		return $query->result_array();
+		$temp = $query->result_array();
+		$result = array();
+
+		foreach($temp as $item)
+		{
+			$this->db->select('repo_name,creator,owner,description,create_date,update_date');
+			$query = $this->db->get_where('repositories',array('repo_name' => $item['repo_name'],'owner' => $item['username']));
+			$result[] = $query->row_array();
+		}
+		return $result;
 	}
 
 	public function select_participates($username)
 	{
-		$this->db->select('repo_name');
+		$this->db->select('repo_name,username');
 		$query = $this->db->get_where('participates',array('username' => $username));
-		return $query->result_array();
+		$temp = $query->result_array();
+		$result = array();
+
+		foreach($temp as $item)
+		{
+			$this->db->select('repo_name,creator,description,create_date,update_date');	
+			$query = $this->db->get_where('repositories',array('repo_name' => $item['repo_name'],'owner' => $item['username']));
+			$result[] = $query->row_array();
+		}
+		return $result;
 	}
 
 	public function create_repo($data)

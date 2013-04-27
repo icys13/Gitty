@@ -19,8 +19,8 @@
 		</a>
 	</div>
 	<div class="tabs-content">
-		<div class="tab-pane" id="creates"></div>
-		<div class="tab-pane" id="forks"></div>
-		<div class="tab-pane" id="participates"></div>
+		<div id="creates"><?=$creates?></div>
+		<div id="forks"><?=$forks?></div>
+		<div id="participates"><?=$participates?></div>
 	</div>
 </div>
