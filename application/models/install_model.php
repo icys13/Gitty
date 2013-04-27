@@ -94,10 +94,11 @@ class Install_model extends CI_Model {
 
 			// 创建项目表
 			$res_sql = 'CREATE TABLE respositories(	
-					res_name VARCHAR(20) NOT NULL,
+					repo_name VARCHAR(20) NOT NULL,
 					owner VARCHAR(20) NOT NULL,
 					creator VARCHAR(20) NOT NULL,
-					PRIMARY KEY (res_name,owner,creator),
+					description TEXT,
+					PRIMARY KEY (repo_name,owner,creator),
 					FOREIGN KEY (owner) REFERENCES users(username),
 					FOREIGN KEY (creator) REFERENCES users(username)
 				)';
@@ -114,32 +115,32 @@ class Install_model extends CI_Model {
 			// 创建 fork 表
 			$fork_sql = 'CREATE TABLE forks(
 					username VARCHAR(20) NOT NULL,
-					res_name VARCHAR(20) NOT NULL,
+					repo_name VARCHAR(20) NOT NULL,
 					creator VARCHAR(20) NOT NULL,
-					PRIMARY KEY (username,res_name),
+					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
-					FOREIGN KEY (res_name) REFERENCES respositories(res_name),
+					FOREIGN KEY (repo_name) REFERENCES respositories(repo_name),
 					FOREIGN KEY (creator)  REFERENCES users(username)
 				)';
 
 			// 创建 create 表
 			$create_sql = 'CREATE TABLE creates(
 					username VARCHAR(20) NOT NULL,
-					res_name VARCHAR(20) NOT NULL,
-					PRIMARY KEY (username,res_name),
+					repo_name VARCHAR(20) NOT NULL,
+					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
-					FOREIGN KEY (res_name) REFERENCES respositories(res_name)
+					FOREIGN KEY (repo_name) REFERENCES respositories(repo_name)
 				)';
 			
 			// 创建 participate 表
 			$parti_sql = 'CREATE TABLE participates(
 					username VARCHAR(20) NOT NULL,
-					res_name VARCHAR(20) NOT NULL,
+					repo_name VARCHAR(20) NOT NULL,
 					creator VARCHAR(20) NOT NULL,
-					PRIMARY KEY (username,res_name),
+					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
 					FOREIGN KEY (creator) REFERENCES users(username),
-					FOREIGN KEY (res_name) REFERENCES respositories(res_name)
+					FOREIGN KEY (repo_name) REFERENCES respositories(repo_name)
 				)';
 
 			// 创建 branches 表

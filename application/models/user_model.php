@@ -119,32 +119,28 @@ class User_model extends CI_Model {
 	{
 		$this->db->select('email');
 		$query = $this->db->get_where('users',array('username' => $username));
-		$result = $query->result();
-		return (array)$result[0];
+		return $query->row_array();
 	}
 
 	public function select_ssh_key($username)
 	{
 		$this->db->select('ssh_key');
 		$query = $this->db->get_where('users',array('username' => $username));
-		$result = $query->result();
-		return (array)$result[0];
+		return $query->row_array();
 	}
 
 	public function select_img_type($username)
 	{
 		$this->db->select('img_type');
 		$query = $this->db->get_where('users',array('username' => $username));
-		$result = $query->result();
-		return (array)$result[0];
+		return $query->row_array();
 	}
 
 	public function select_img($username)
 	{
 		$this->db->select('img');
 		$query = $this->db->get_where('users',array('username' => $username));
-		$result = $query->result();
-		return (array)$result[0];
+		return $query->row_array();
 	}
 
 	public function signup($data = array())
