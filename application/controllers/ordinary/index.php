@@ -124,6 +124,58 @@ class Index extends Users {
 			$this->load->view('footer');
 		}
 	}
+
+	// 站内搜索
+	public function search()
+	{
+		$keyword = $this->input->post('keyword');
+		if(!empty($keyword))
+		{
+			$users = $this->user_model->search($keyword);
+			$repos = $this->repository_model->search($keyword);
+			$msg['user_num'] = count($users);
+			$msg['repo_num'] = count($repos['creates'])+count($repos['forks'])+count($repos['participates']);
+			$msg1['value'] = $keyword;
+			$msg['repos'] = '<div class="repos">';
+			$msg['users'] = '<ul class="users">';
+
+			foreach($users as $item)
+			{
+				$msg['users'] .= '<li><a href="">'.$item['username'];
+				$msg['users'] .= '</a><span class="location"><i class="icon-map-marker"></i>'.$item['location'].'</span>';
+				$msg['users'] .= '<span class="date"><i></i>'.$item['date'].'</span></li>';
+			}
+			$msg['users'] .= '</ul>';
+			foreach($repos['creates'] as $item)
+			{
+				$msg['repos'] .= '<div class="repo"><div class="cf"><div class="repo-info">';
+				$msg['repos'] .= '<h5><a href="">'.$item['username'].'/'.$item['repo_name'].'</a></h5></div></div></div>';
+			}
+			foreach($repos['forks'] as $item)
+			{
+				$msg['repos'] .= '<div class="repo"><div class="cf"><div class="repo-info">';
+				$msg['repos'] .= '<h5><a href="">'.$item['username'].'/'.$item['repo_name'].'-------克隆于 '.$item['creator'].'</a></h5></div></div></div>';
+			}
+			foreach($repos['participates'] as $item)
+			{
+				$msg['repos'] .= '<div class="repo"><div class="cf"><div class="repo-info">';
+				$msg['repos'] .= '<h5><a href="">'.$item['username'].'/'.$item['repo_name'].'-------发起于 '.$item['creator'].'</a></h5></div></div></div>';
+			}
+			$msg['repos'] .= '</div>';
+
+			$this->load->view('header');
+			$this->load->view('ordinary/search',$msg1);
+			$this->load->view('ordinary/search_corr',$msg);
+			$this->load->view('footer');
+		}
+		else
+		{
+			$this->load->view('header');
+			$this->load->view('ordinary/search');
+			$this->load->view('ordinary/search_err');
+			$this->load->view('footer');
+		}
+	}
 }
 
 /* End of file index.pho */

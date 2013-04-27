@@ -143,6 +143,15 @@ class User_model extends CI_Model {
 		return $query->row_array();
 	}
 
+	// 模糊查询用户
+	public function search($keyword)
+	{
+		$this->db->like(array('username' => $keyword));
+		$this->db->select('username,location,date');
+		$query = $this->db->get('users');
+		return $query->result_array();
+	}
+
 	public function signup($data = array())
 	{
 		if(preg_match('/^[a-zA-Z0-9\_]{5,20}$/',$data['username']) && preg_match('/^[a-zA-Z0-9\_]{6,20}$/',$data['password']))

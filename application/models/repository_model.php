@@ -56,6 +56,28 @@ class Repository_model extends CI_Model {
 		return $result;
 	}
 
+	public function search($keyword)
+	{
+		// 模糊查询创建的项目
+		$this->db->like(array('repo_name' => $keyword));
+		$this->db->select('repo_name,username');
+		$query = $this->db->get('creates');
+		$result['creates'] = $query->result_array();
+
+		// 模糊查询克隆的项目
+		$this->db->like(array('repo_name' => $keyword));
+		$this->db->select('repo_name,username,creator');
+		$query = $this->db->get('forks');
+		$result['forks'] = $query->result_array();
+
+		// 模糊查询参与项目
+		$this->db->like(array('repo_name' => $keyword));
+		$this->db->select('repo_name,username,creator');
+		$result['participates'] = $query->result_array();
+
+		return $result;
+	}
+
 	public function create_repo($data)
 	{
 		$data['create_date'] = date("Y-m-d");

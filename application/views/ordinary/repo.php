@@ -1,3 +1,13 @@
+<header id="header" role="banner">
+	<div class="inner cf">
+		<div class="user-nav">
+		<form accetp-charset="UTF-8" action="<?=base_url()?>index.php/ordinary/index/search" id="search-form" method="post">
+				<input id="keyword" name="keyword" placeholder="搜索 ..." type="text">
+				<button class="icon-search" type="submit">q</button>
+			</form>
+		</div>
+	</div>
+</header>
 <div class="main">
 	<ul class="tabs">
 		<li class="">
@@ -11,8 +21,6 @@
 		</li>
 	</ul>
 	<div class="profile-actions">
-		<label class="icon-search" for="repos-filter"></label>
-		<input class="filter-input" id="repos-filter" placeholder="查找项目" type="text">
 		<a class="btn btn-new-repo" href="<?=base_url()?>index.php/ordinary/index/create_repo">
 			<i class="icon"></i>
 				创建
