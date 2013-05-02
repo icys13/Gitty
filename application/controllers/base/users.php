@@ -145,7 +145,7 @@ class Users extends Authorization {
 
 			// 更新 server 上gitosis的 key 信息
 			$this->load->helper('file');
-			write_file('./gitosis-conf/'.$this->username.'.pub',$ssh_key);
+			write_file('./gitosis-conf/gitosis-admin/keydir/'.$this->username.'.pub',$ssh_key);
 
 			if($this->session->userdata('admin'))
 				redirect(site_url('admin/index/public_key'));
@@ -170,7 +170,7 @@ class Users extends Authorization {
 
 		// 删除 server 上的 .pub 文件
 		//$this->load->helper('file');
-		unlink('./gitosis-conf/'.$this->username.'.pub');
+		unlink('./gitosis-conf/gitosis-admin/keydir/'.$this->username.'.pub');
 		if($this->session->userdata('admin'))
 			redirect(site_url('admin/index/public_key'));
 		else

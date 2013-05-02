@@ -89,6 +89,7 @@ class Repository_model extends CI_Model {
 		$this->db->query($query2);
 
 		// 在 server 上创建相应的裸仓库 
+		// 在 server 上进行相应的配置
 	}
 }
 
