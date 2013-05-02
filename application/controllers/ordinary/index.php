@@ -102,6 +102,7 @@ class Index extends Users {
 		$data['creator'] = $this->input->post('creator');
 		$data['owner'] = $data['creator'];
 		$data['description'] = $this->input->post('description');
+
 		if(!empty($data['repo_name']) && !empty($data['creator']))
 		{
 			$this->repository_model->create_repo($data);
