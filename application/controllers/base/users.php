@@ -146,7 +146,6 @@ class Users extends Authorization {
 			// 更新 server 上gitosis的 key 信息
 			$this->load->helper('file');
 			write_file('./gitosis-conf/gitosis-admin/keydir/'.$this->username.'.pub',$ssh_key);
-
 			if($this->session->userdata('admin'))
 				redirect(site_url('admin/index/public_key'));
 			else
