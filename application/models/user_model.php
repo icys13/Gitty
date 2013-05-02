@@ -96,7 +96,8 @@ class User_model extends CI_Model {
 		$this->db->select('full_name');
 		$query = $this->db->get_where('users',array('username' => $username));
 		$result = $query->row_array();
-		return $result['full_name'];
+		if(!empty($result['full_name']))
+			return $result['full_name'];
 	}
 
 	public function select_location($username)
@@ -104,7 +105,8 @@ class User_model extends CI_Model {
 		$this->db->select('location');
 		$query = $this->db->get_where('users',array('username' => $username));
 		$result = $query->row_array();
-		return $result['location'];
+		if(!empty($result['location']))
+			return $result['location'];
 	}
 
 	public function select_date($username)
@@ -112,7 +114,8 @@ class User_model extends CI_Model {
 		$this->db->select('date');
 		$query =  $this->db->get_where('users',array('username' => $username));
 		$result = $query->row_array();
-		return  $result['date'];
+		if(!empty($result['date']))
+			return  $result['date'];
 	}
 
 	public function select_email($username)

@@ -150,7 +150,12 @@ class Install_model extends CI_Model {
 			// 创建 commits 表
 			// 创建 trees 表
 			// 创建 blobs 表
-
+	//		if(!mkdir('./gitosis-conf'))
+	//		{
+	//			$msg['flag'] = FALSE;
+	//			$msg['remind']['error'] = 'gitosis-conf 文件夹创建失败!	请检查相应权限!';
+	//			return $msg;
+	//		}
 			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql) && mysql_query($regist_sql) && mysql_query($regist_sql_insert)  && mysql_query($user_sql_insert))
 			{
 				mysql_close($con);

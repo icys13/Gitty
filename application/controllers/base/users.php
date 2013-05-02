@@ -133,9 +133,20 @@ class Users extends Authorization {
 		$data['ssh_key'] = $this->input->post('ssh_key');
 		if(!empty($data['ssh_key']))
 		{
+			// 解析 ssh_key 格式
 			$temp = explode(' ',$data['ssh_key']);
-			$ssh_key = $temp[0].' '.$temp[1];
+			if(count($temp) > 1) 
+			{
+				$ssh_key = $temp[0].' '.$temp[1];
+			}
+
+			// 将新 key 存入 db
 			$this->user_model->account_update($this->username,array('ssh_key' => $ssh_key));
+
+			// 更新 server 上gitosis的 key 信息
+			$this->load->helper('file');
+			write_file('./gitosis-conf/'.$this->username.'.pub',$ssh_key);
+
 			if($this->session->userdata('admin'))
 				redirect(site_url('admin/index/public_key'));
 			else

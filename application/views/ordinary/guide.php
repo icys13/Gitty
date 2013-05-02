@@ -25,7 +25,7 @@
 					touch README.md
 					git add README.md
 					git commit -m 'first commit'
-					git remote add origin git@hostname:<?=$username.'/'.$repo_name.'.git'?>			
+					git remote add origin git@hostname:<?=$username.'@'.$repo_name.'.git'?>			
 					test.git
 					git push -u origin master
 				</code>
@@ -39,7 +39,7 @@
 			<pre>
 				<code>
 					cd existing_git_repo
-					git remote add origin git@hostname:<?=$username.'/'.$repo_name.'.git'?>					git push -u origin master
+					git remote add origin git@hostname:<?=$username.'@'.$repo_name.'.git'?>					git push -u origin master
 				</code>
 			</pre>
 		</div>
@@ -47,6 +47,6 @@
 			<span class="icon">3</span>
 			当你完成的时候:
 		</h3>
-		<a class="btn btn-primary" href="ordinary/repository/index/<?=$username.'/'.$repo_name?>">继续</a>
+		<a class="btn btn-primary" href="<?=base_url()?>ordinary/repository/index/<?=$username.'/'.$repo_name?>">继续</a>
 	</div>
 </div>
