@@ -165,7 +165,12 @@ class Users extends Authorization {
 	// 删除旧 ssh_key
 	public function del_key($username = '')
 	{
+		// 数据库操作
 		$this->user_model->account_update($this->username,array('ssh_key' => ''));
+
+		// 删除 server 上的 .pub 文件
+		//$this->load->helper('file');
+		unlink('./gitosis-conf/'.$this->username.'.pub');
 		if($this->session->userdata('admin'))
 			redirect(site_url('admin/index/public_key'));
 		else
