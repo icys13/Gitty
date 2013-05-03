@@ -90,6 +90,10 @@ class Repository_model extends CI_Model {
 
 		// 在 server 上创建相应的裸仓库 
 		// 在 server 上进行相应的配置
+		// 修改 gitosis.conf 文件
+		$this->load->helper('file');
+		$tmp = "\n[group ".strtotime("now")."]\nmembers = ".$data['creator']."\nwritable = ".$data['creator'].'@'.$data['repo_name']."\n";
+		write_file('./gitosis-conf/gitosis-admin/gitosis.conf',$tmp,'a+');
 	}
 }
 
