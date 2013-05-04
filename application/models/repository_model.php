@@ -73,8 +73,33 @@ class Repository_model extends CI_Model {
 		// 模糊查询参与项目
 		$this->db->like(array('repo_name' => $keyword));
 		$this->db->select('repo_name,username,creator');
-		$result['participates'] = $query->result_array();
+		return $result;
+	}
 
+	// 判断 username 用户的 reponame 项目是否进行了推送
+	public function is_empty($username,$reponame)
+	{
+		// 查询 creates 表
+		$this->db->select('HEAD');
+		$query = $this->db->get_where('creates',array('username' => $username,'repo_name' => $reponame));
+		$result[] = $query->row_array();
+		if(!empty($result['HEAD']))
+			return $result;
+
+		// 查询 fokes 表
+		$this->db->select('HEAD');
+		$query = $this->db->get_where('forks',array('username' => $username,'repo_name' => $reponame));
+		$result[] = $query->row_array();
+		if(!empty($result['HEAD']))
+			return $result;
+
+		// 查询 participates 表
+		$this->db->select('HEAD');
+		$query = $this->db->get_where('participates',array('username' => $username,'repo_name' => $reponame));
+		$result[] = $query->row_array();
+		if(!empty($result['HEAD']))
+			return $result;
+		$result['empty'] = TRUE;
 		return $result;
 	}
 

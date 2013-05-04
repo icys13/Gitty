@@ -47,6 +47,6 @@
 			<span class="icon">3</span>
 			当你完成的时候:
 		</h3>
-		<a class="btn btn-primary" href="<?=base_url()?>ordinary/repository/index/<?=$username.'/'.$repo_name?>">继续</a>
+		<a class="btn btn-primary" href="<?=base_url()?>index.php/ordinary/repository/index/<?=$username.'/'.$repo_name?>">继续</a>
 	</div>
 </div>

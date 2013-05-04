@@ -119,6 +119,7 @@ class Install_model extends CI_Model {
 					username VARCHAR(20) NOT NULL,
 					repo_name VARCHAR(20) NOT NULL,
 					creator VARCHAR(20) NOT NULL,
+					HEAD CHAR(40),
 					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
 					FOREIGN KEY (repo_name) REFERENCES repositories(repo_name),
@@ -129,6 +130,7 @@ class Install_model extends CI_Model {
 			$create_sql = 'CREATE TABLE creates(
 					username VARCHAR(20) NOT NULL,
 					repo_name VARCHAR(20) NOT NULL,
+					HEAD CHAR(40),
 					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
 					FOREIGN KEY (repo_name) REFERENCES repositories(repo_name)
@@ -139,6 +141,7 @@ class Install_model extends CI_Model {
 					username VARCHAR(20) NOT NULL,
 					repo_name VARCHAR(20) NOT NULL,
 					creator VARCHAR(20) NOT NULL,
+					HEAD CHAR(40),
 					PRIMARY KEY (username,repo_name),
 					FOREIGN KEY (username) REFERENCES users(username),
 					FOREIGN KEY (creator) REFERENCES users(username),
