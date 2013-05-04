@@ -24,7 +24,7 @@ class Index extends Users {
 			foreach($creates as $item)
 			{
 				$msg2['creates'] .= '<div class="repo">';
-				$msg2['creates'] .= '<div class="cf"><div class="repo-info"><h5><a href="">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['creates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
 				$msg2['creates'] .= '<p class="desc">'.$item['description'].'</p>';
 				$msg2['creates'] .= '<p class="updated-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
 			}
@@ -39,7 +39,7 @@ class Index extends Users {
 			foreach($forks as $item)
 			{
 				$msg2['forks'] .= '<div class="repo">';
-				$msg2['forks'] .= '<div class="cf"><div class="repo-info"><h5><a href="">'.$item['owner'].'/'.$item['repo_name'].'-------克隆于'.$item['creator'].'</a></h5></div></div>';
+				$msg2['forks'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['owner'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'-------克隆于'.$item['creator'].'</a></h5></div></div>';
 				$msg2['forks'] .= '<p class="desc">'.$item['description'].'</p>';
 				$msg2['forks'] .= '<p class="updated-at"><i class="icon-time"></i>克隆于 '.$item['create_date'].',更新于'.$item['update_date'].'</p></div>';
 			}
@@ -54,7 +54,7 @@ class Index extends Users {
 			foreach($participates as $item)
 			{
 				$msg2['participates'] .= '<div class="repo">';
-				$msg2['participates'] .= '<div class="cf"><div class="repo-info"><h5><a href="">'.$item['owner'].'/'.$item['repo_name'].'-------参加于'.$item['creator'].'</a></h5></div></div>';
+				$msg2['participates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'-------参加于'.$item['creator'].'</a></h5></div></div>';
 				$msg2['participates'] .= '<p class="desc">'.$item['description'].'</p>';
 				$msg2['participates'] .= '<p class="updated-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于'.$item['update_date'].'</p></div>';
 			}
