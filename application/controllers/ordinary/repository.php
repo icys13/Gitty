@@ -31,8 +31,13 @@ class Repository extends Users {
 		}
 		else
 		{
-			// 显示项目首页
-			echo 'haha';
+			// 显示项目主页
+			echo $data['HEAD'].'<br/>';
+			$array = array();
+			$rc;
+			exec('./scripts/rev-parse.sh',$array,$rc);
+			echo $rc;
+			print_r($array);
 		}
 	}
 }

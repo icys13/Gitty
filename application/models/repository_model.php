@@ -82,23 +82,32 @@ class Repository_model extends CI_Model {
 		// 查询 creates 表
 		$this->db->select('HEAD');
 		$query = $this->db->get_where('creates',array('username' => $username,'repo_name' => $reponame));
-		$result[] = $query->row_array();
+		$result = $query->row_array();
 		if(!empty($result['HEAD']))
+		{
+			$result['empty'] = FALSE;
 			return $result;
+		}
 
 		// 查询 fokes 表
 		$this->db->select('HEAD');
 		$query = $this->db->get_where('forks',array('username' => $username,'repo_name' => $reponame));
-		$result[] = $query->row_array();
+		$result = $query->row_array();
 		if(!empty($result['HEAD']))
+	   	{
+			$result['empty'] = FALSE;
 			return $result;
+		}
 
 		// 查询 participates 表
 		$this->db->select('HEAD');
 		$query = $this->db->get_where('participates',array('username' => $username,'repo_name' => $reponame));
-		$result[] = $query->row_array();
+		$result = $query->row_array();
 		if(!empty($result['HEAD']))
+		{
+			$result['empty'] = FALSE;
 			return $result;
+		}
 		$result['empty'] = TRUE;
 		return $result;
 	}
