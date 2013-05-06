@@ -112,6 +112,18 @@ class Repository_model extends CI_Model {
 		return $result;
 	}
 
+	// 检查 commits 是否更新
+	public function commits_update($username,$reponame)
+	{
+		// 初始化 result 数组,保证 result 数组初始为空
+		$result = array();
+		unset($result);
+
+		// 循环更新
+		exec("./scripts/rev-parse.sh $username $reponame HEAD",$result);
+		echo  $result[0];
+	}
+
 	public function create_repo($data)
 	{
 		// 插入数据到数据库
