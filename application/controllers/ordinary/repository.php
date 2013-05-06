@@ -103,12 +103,28 @@ class Repository extends Users {
 				if($flag)
 					$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$latest);
 			}
+
 			$this->load->view('header');
-			//$this->load->view();
+
+			// 项目文件结构
+			$msg1 = $this->tree_browser($username,$reponame);
+			$msg1['username'] = $username;
+			$msg1['repo_name'] = $reponame;
+			$this->load->view('ordinary/tree_browser',$msg1);
+
+			// README.md(README)文件内容(如果存在的话)
+			$msg2 = $this->preview($username,$reponame);
+			$this->load->view('ordinary/preview',$msg2);
+
 			$this->load->view('footer');
 		}
 	}
 
+	private function tree_browser($username,$reponame)
+	{}
+
+	private function preview($uername,$reponame)
+	{}
 	// 将 commit 信息数据库化
 	private function format($content)
 	{
