@@ -39,27 +39,30 @@ class Repository extends Users {
 
 			if(empty($data['HEAD']))
 			{
+		//		$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'HEAD' => $latest));
+				$content = array();
 				while($HEAD != $result[0])
 				{
 					// 获取commits详细信息
-					//$this->repository_model->insert_commits($username,$reponame,$result[0]);
-					$content = array();
-					//	exec("./scripts/cat-file.sh $username $reponame -p $HEAD",$content);
-					exec('./scripts/cat-file.sh ikimi second -p 7ecd',$content);
-					print_r($content);
 					unset($content);
-					echo $result[0].'<br/>';
+					exec("./scripts/cat-file.sh $username $reponame -p $HEAD",$content);
+
+					$temp = $this->format($content);
+					$temp['username'] = $username;
+					$temp['repo_name'] = $reponame;
+					$temp['commit'] = $result[0];
+
+					$this->repository_model->insert_commits($temp);
 					$HEAD = $result[0].'^';
-				//	echo $HEAD.'<br/>';
 					unset($result);
 					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
-		//		$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
 			}
 			else
 			{
 				$HEAD = 'HEAD';
 				$flag = FALSE;
+				$content = array();
 				unset($result);
 				exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				if($data['HEAD'] != $result[0])
@@ -68,9 +71,16 @@ class Repository extends Users {
 				{
 					// 获取 commits 详细信息
 					//$this->repository_model->insert_commits($username,$reponame.$result[0]);
-					echo $result[0];
+					unset($content);
+					exec("./scripts/cat-file.sh $username $reponame -p $HEAD",$content);
+
+					$temp = $this->format($content);
+					$temp['username'] = $username;
+					$temp['repo_name'] = $reponame;
+					$temp['commit'] = $result[0];
+
+					$this->repository_model->insert_commits($temp);
 					$HEAD = $result[0].'^';
-				//	echo $HEAD.'<br/>';
 					unset($result);
 					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
@@ -78,16 +88,51 @@ class Repository extends Users {
 		//		if($flag)
 		//			$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
 			}
-			$this->load->view('header');
+	//		$this->load->view('header');
 			//$this->load->view();
-			$this->load->view('footer');
+	//		$this->load->view('footer');
 		}
 	}
 
 	// 将 commit 信息数据库化
 	private function format($content)
 	{
-		
+		$judge = explode(" ",$content[1]);
+		$data = array(
+			'tree' => '',
+			'parent' => '',
+			'author' => '',
+			'committer' => '',
+			'date' => '',
+			'message' => ''
+		);
+		if($judge[0] == 'parent')
+			$i = 4;
+		else
+			$i = 3;
+		for($j = 0;$j < $i;$j++)
+		{
+			$temp = explode(" ",$content[$j]);
+			// 分类
+			if($temp[0] == 'tree')
+				$data['tree'] = $temp[1];
+			elseif($temp[0] == 'parent')
+				$data['parent'] = $temp[1];
+			elseif($temp[0] == 'author')
+				$data['author'] = $temp[1];
+			elseif($temp[0] == 'committer')
+			{
+				$data['committer'] = $temp[1];
+				$data['date'] = $temp[3];
+			}
+		}
+		$size = count($content);
+		for($j = $i;$j < $size;$j++)
+		{
+			$temp = explode(" ",$content[$j]);
+			$data['message'] .=$temp[0]."\n";
+		}
+		return $data;
 	}
 }
 

@@ -150,7 +150,19 @@ class Install_model extends CI_Model {
 
 			// 创建 branches 表
 			// 创建 tags 表
-			// 创建 commits 表
+			// 创建 ommits 表
+			$commits_sql = 'CREATE TABLE commits(
+					username VARCHAR(20) NOT NULL,
+					repo_name VARCHAR(20) NOT NULL,
+					commit CHAR(40) NOT NULL,
+					tree CHAR(40),
+					parent CHAR(40),
+					author VARCHAR(20),
+					committer VARCHAR(20),
+					date DATE,
+					message TEXT,
+					PRIMARY KEY (username,repo_name,commit)
+				)';
 			// 创建 trees 表
 			// 创建 blobs 表
 	//		if(!mkdir('./gitosis-conf'))
