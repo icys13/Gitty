@@ -34,13 +34,13 @@ class Repository extends Users {
 		{
 			$HEAD = 'HEAD';
 			$result = array();
+			$content = array();
 			exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 			$latest = $result[0];
 
 			if(empty($data['HEAD']))
 			{
-		//		$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'HEAD' => $latest));
-				$content = array();
+				$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$result[0]);
 				while($HEAD != $result[0])
 				{
 					// 获取commits详细信息
@@ -55,6 +55,7 @@ class Repository extends Users {
 					$this->repository_model->insert_commits($temp);
 					$HEAD = $result[0].'^';
 					unset($result);
+
 					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
 			}
@@ -62,15 +63,15 @@ class Repository extends Users {
 			{
 				$HEAD = 'HEAD';
 				$flag = FALSE;
-				$content = array();
 				unset($result);
+
 				exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				if($data['HEAD'] != $result[0])
 					$flag = TRUE;
+
 				while($data['HEAD'] != $result[0])
 				{
 					// 获取 commits 详细信息
-					//$this->repository_model->insert_commits($username,$reponame.$result[0]);
 					unset($content);
 					exec("./scripts/cat-file.sh $username $reponame -p $HEAD",$content);
 
@@ -84,13 +85,12 @@ class Repository extends Users {
 					unset($result);
 					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
-				echo $result[0];
-		//		if($flag)
-		//			$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
+				if($flag)
+					$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
 			}
-	//		$this->load->view('header');
+			$this->load->view('header');
 			//$this->load->view();
-	//		$this->load->view('footer');
+			$this->load->view('footer');
 		}
 	}
 

@@ -83,33 +83,44 @@ class Repository_model extends CI_Model {
 		$this->db->select('HEAD');
 		$query = $this->db->get_where('creates',array('username' => $username,'repo_name' => $reponame));
 		$result = $query->row_array();
-		if(!empty($result['HEAD']))
+		if($query->num_rows())
 		{
-			$result['empty'] = FALSE;
 			$result['table'] = 'creates';
-			return $result;
+			if(!empty($result['HEAD']))
+			{
+				$result['empty'] = FALSE;
+				return $result;
+			}
 		}
-
 		// 查询 forks 表
-		$this->db->select('HEAD');
-		$query = $this->db->get_where('forks',array('username' => $username,'repo_name' => $reponame));
-		$result = $query->row_array();
-		if(!empty($result['HEAD']))
-	   	{
-			$result['empty'] = FALSE;
-			$result['table'] = 'forks';
-			return $result;
-		}
-
-		// 查询 participates 表
-		$this->db->select('HEAD');
-		$query = $this->db->get_where('participates',array('username' => $username,'repo_name' => $reponame));
-		$result = $query->row_array();
-		if(!empty($result['HEAD']))
+		else
 		{
-			$result['empty'] = FALSE;
-			$reuslt['table'] = 'participates';
-			return $result;
+			$this->db->select('HEAD');
+			$query = $this->db->get_where('forks',array('username' => $username,'repo_name' => $reponame));
+			$result = $query->row_array();
+			if($query->num_rows())
+			{
+				$result['table'] = 'forks';
+				if(!empty($result['HEAD']))
+				{
+					$result['empty'] = FALSE;
+					return $result;
+				}
+			}
+		// 查询 participates 表
+			else
+			{
+				$this->db->select('HEAD');
+				$query = $this->db->get_where('participates',array('username' => $username,'repo_name' => $reponame));
+				$result = $query->row_array();
+				if($query->num_rows())
+					$result['table'] = 'participates';
+				if(!empty($result['HEAD']))
+				{
+					$result['empty'] = FALSE;
+					return $result;
+				}
+			}
 		}
 		$result['empty'] = TRUE;
 		return $result;
@@ -126,20 +137,19 @@ class Repository_model extends CI_Model {
 	}
 
 	// 插入最新 commit 表
-	public function insert_latest_commit($table,$data)
+	public function insert_latest_commit($table,$data,$HEAD)
 	{
 		$this->db->select('HEAD');
 		$query = $this->db->get_where($table,$data);
-		$query = $this->db->insert_string($table,$data);
 
 		// 原条目存在 更新条目
 		if($query->num_rows())
 		{
-			$this->db->update($table,$data,array('username' => $data['username'],'repo_name' => $data['repo_name']));
+			$this->db->update($table,array('HEAD' => $HEAD),$data);
 		}
 		else
 		{
-			$this->db->insert($table,$data);// 插入新条目
+			$this->db->insert($table,array('username' => $data['username'],'repo_name' => $data['repo_name'],'HEAD' => $HEAD));// 插入新条目
 		}
 	}
 
@@ -147,8 +157,9 @@ class Repository_model extends CI_Model {
 	public function insert_commits($data)
 	{
 		print_r($data);
-	//	$query = $this->db->insert_string('commits',$data);
-	//	$this->db->query($query);
+		$data['date'] = date("Y-m-d",$data['date']); 
+		$query = $this->db->insert_string('commits',$data);
+		$this->db->query($query);
 	}
 
 	public function create_repo($data)

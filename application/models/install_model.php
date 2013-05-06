@@ -159,7 +159,7 @@ class Install_model extends CI_Model {
 					parent CHAR(40),
 					author VARCHAR(20),
 					committer VARCHAR(20),
-					date DATE,
+					date TIMESTAMP,
 					message TEXT,
 					PRIMARY KEY (username,repo_name,commit)
 				)';
