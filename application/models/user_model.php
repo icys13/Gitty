@@ -171,6 +171,11 @@ class User_model extends CI_Model {
 					$msg['remind']['error'] = '用户名密码不匹配!';
 				}
 			}
+			else
+			{
+				$msg['flag'] = FALSE;
+				$msg['remind']['error'] = '该用户不存在,可以注册!';
+			}
 		}
 		else
 		{

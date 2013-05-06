@@ -159,7 +159,7 @@ class Install_model extends CI_Model {
 					parent CHAR(40),
 					author VARCHAR(20),
 					committer VARCHAR(20),
-					date TIMESTAMP,
+					date DATE,
 					message TEXT,
 					PRIMARY KEY (username,repo_name,commit)
 				)';
@@ -171,7 +171,7 @@ class Install_model extends CI_Model {
 	//			$msg['remind']['error'] = 'gitosis-conf 文件夹创建失败!	请检查相应权限!';
 	//			return $msg;
 	//		}
-			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql) && mysql_query($regist_sql) && mysql_query($regist_sql_insert)  && mysql_query($user_sql_insert))
+			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql) && mysql_query($regist_sql) && mysql_query($regist_sql_insert)  && mysql_query($user_sql_insert) && mysql_query($commits_sql))
 			{
 				mysql_close($con);
 				$msg['flag'] = TRUE;

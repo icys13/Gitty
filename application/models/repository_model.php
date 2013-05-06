@@ -129,11 +129,10 @@ class Repository_model extends CI_Model {
 	// 检查 git 版本库是否为空
 	public function git_is_empty($username,$reponame)
 	{
-		$result = array();
-		exec("./scripts/rev-parse.sh $username $reponame HEAD",$result);
-		if($result[0] == 'HEAD')
+		$dir = '/home/git/repositories/';
+		if(!file_exists($dir.$username.'@'.$reponame.'.git'))
 			return TRUE;
-		return false;
+		return FALSE;
 	}
 
 	// 插入最新 commit 表

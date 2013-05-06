@@ -37,7 +37,7 @@ class Repository extends Users {
 			$content = array();
 			exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 			$latest = $result[0];
-
+			print_r($result);
 			if(empty($data['HEAD']))
 			{
 				$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$result[0]);
@@ -86,7 +86,7 @@ class Repository extends Users {
 					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
 				if($flag)
-					$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
+					$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$latest);
 			}
 			$this->load->view('header');
 			//$this->load->view();
@@ -127,10 +127,9 @@ class Repository extends Users {
 			}
 		}
 		$size = count($content);
-		for($j = $i;$j < $size;$j++)
+		for($j = $i + 1;$j < $size;$j++)
 		{
-			$temp = explode(" ",$content[$j]);
-			$data['message'] .=$temp[0]."\n";
+			$data['message'] .=$content[$j]."\n";
 		}
 		return $data;
 	}
