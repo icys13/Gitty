@@ -79,7 +79,6 @@ class Repository extends Users {
 				{
 					$tree = array();
 					exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
-					print_r($tree);
 					$this->ls_tree($tree);
 					$flag = TRUE;
 				}
@@ -107,24 +106,55 @@ class Repository extends Users {
 			$this->load->view('header');
 
 			// 项目文件结构
-			$msg1 = $this->tree_browser($username,$reponame);
-			$msg1['username'] = $username;
-			$msg1['repo_name'] = $reponame;
-			$this->load->view('ordinary/tree_browser',$msg1);
+			$browser = $this->tree_browser($username,$reponame);
+			$browser['username'] = $username;
+			$browser['repo_name'] = $reponame;
+			$this->load->view('ordinary/tree_browser',$browser);
 
 			// README.md(README)文件内容(如果存在的话)
-			$msg2 = $this->preview($username,$reponame);
-			$this->load->view('ordinary/preview',$msg2);
+			$file = 'README.md';
+			$preview = $this->preview($username,$reponame,$file);
+
+			$msg['file'] = array();
+			exec("./scripts/cat-file.sh $username $reponame -p {$preview['SHA']}",$msg['file']);
+			$this->load->view('ordinary/preview',$msg);
 
 			$this->load->view('footer');
 		}
 	}
 
 	private function tree_browser($username,$reponame)
-	{}
+	{
+		$this->db->select('dir_name');
+		$this->db->order_by('dir_name');
+		$query = $this->db->get_where('trees',array('username' => $username, 'repo_name' => $reponame));
+		$result = $query->result_array();
+		$trees = array();
+		foreach($result as $item)
+		{
+			$trees[] = $item['dir_name'];
+		}
 
-	private function preview($uername,$reponame)
-	{}
+		$this->db->select('file_name');
+		$this->db->order_by('file_name','asc');
+		$query = $this->db->get_where('blobs',array('username' => $username,'repo_name' => $reponame));
+		$result = $query->result_array();
+		$blobs = array();
+		foreach($result as $item)
+		{
+			$blobs[] = $item['file_name'];
+		}
+		return array('trees' => $trees,'blobs' => $blobs);
+	}
+
+	private function preview($username,$reponame,$file)
+	{
+		$this->db->select('SHA');
+		$query = $this->db->get_where('blobs',array('username' => $username,'repo_name' => $reponame,'file_name' => $file));
+		$result = $query->row_array();
+		return $result;
+	}
+
 	// 将 commit 信息数据库化
 	private function format($content)
 	{
@@ -175,16 +205,15 @@ class Repository extends Users {
 		for($i = 0;$i < $size;$i++)
 		{
 			$temp = explode(" ",$tree[$i]);
-			print_r($temp);
 			if($temp[1] == 'blob')
 			{
 				// 文件
-				$this->repository_model->insert_blobs(array('username' => $username,'repo_name' => $reponame,'SHA' => substr($temp[2],0,40),'file_name' => substr($temp[2],40)));
+				$this->repository_model->insert_blobs(array('username' => $username,'repo_name' => $reponame,'SHA' => substr($temp[2],0,40),'file_name' => substr($temp[2],41)));
 			}
 			else
 			{
 				// 目录
-				$this->repository_model->insert_trees(array('username' => $username,'repo_name' => $reponame,'SHA' => substr($temp[2],0,40),'dir_name' => substr($temp[2],40)));
+				$this->repository_model->insert_trees(array('username' => $username,'repo_name' => $reponame,'SHA' => substr($temp[2],0,40),'dir_name' => substr($temp[2],41)));
 			}
 		}
 	}
