@@ -77,7 +77,7 @@ class Repository_model extends CI_Model {
 	}
 
 	// 判断 username 用户的 reponame 项目是否进行了推送
-	public function is_empty($username,$reponame)
+	public function db_is_empty($username,$reponame)
 	{
 		// 查询 creates 表
 		$this->db->select('HEAD');
@@ -86,16 +86,18 @@ class Repository_model extends CI_Model {
 		if(!empty($result['HEAD']))
 		{
 			$result['empty'] = FALSE;
+			$result['table'] = 'creates';
 			return $result;
 		}
 
-		// 查询 fokes 表
+		// 查询 forks 表
 		$this->db->select('HEAD');
 		$query = $this->db->get_where('forks',array('username' => $username,'repo_name' => $reponame));
 		$result = $query->row_array();
 		if(!empty($result['HEAD']))
 	   	{
 			$result['empty'] = FALSE;
+			$result['table'] = 'forks';
 			return $result;
 		}
 
@@ -106,22 +108,31 @@ class Repository_model extends CI_Model {
 		if(!empty($result['HEAD']))
 		{
 			$result['empty'] = FALSE;
+			$reuslt['table'] = 'participates';
 			return $result;
 		}
 		$result['empty'] = TRUE;
 		return $result;
 	}
 
+	// 检查 git 版本库是否为空
+	public function git_is_empty($username,$reponame)
+	{
+		$result = array();
+		exec("./scripts/rev-parse.sh $username $reponame HEAD",$result);
+		if($result[0] == 'HEAD')
+			return TRUE;
+		return false;
+	}
+
+	public function commits_init($username,$reponame)
+	{
+	
+	}
+
 	// 检查 commits 是否更新
 	public function commits_update($username,$reponame)
 	{
-		// 初始化 result 数组,保证 result 数组初始为空
-		$result = array();
-		unset($result);
-
-		// 循环更新
-		exec("./scripts/rev-parse.sh $username $reponame HEAD",$result);
-		echo  $result[0];
 	}
 
 	public function create_repo($data)

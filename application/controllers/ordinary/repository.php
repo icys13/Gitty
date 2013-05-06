@@ -17,10 +17,9 @@ class Repository extends Users {
 	public function index($username,$reponame)
 	{
 		// 检查 commits 是否更新
-		$this->repository_model->commits_update($username,$reponame);
-//		$data = $this->repository_model->is_empty($username,$reponame);
-/*
-		if($data['empty'])
+		$data = $this->repository_model->db_is_empty($username,$reponame);
+
+		if($data['empty'] && $this->repository_model->git_is_empty($username,$reponame))
 		{
 			$msg['error'] = '您还没有推送项目!';
 			$msg['username'] = $username;
@@ -33,15 +32,42 @@ class Repository extends Users {
 		}
 		else
 		{
-			// 显示项目主页
-			echo $data['HEAD'].'<br/>';
-			$array = array();
-			$rc;
-			exec('./scripts/rev-parse.sh HEAD',$array,$rc);
-			echo $rc;
-			print_r($array);
+			$HEAD = 'HEAD';
+			$result = array();
+			exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
+			$latest = $result[0];
+
+			if(empty($data['HEAD']))
+			{
+				while($HEAD != $result[0])
+				{
+					// 获取commits详细信息
+					// ....
+					$this->repository_model->insert_commits('commits',$username,$reponame,$result[0]);
+					$HEAD = $HEAD.'^';
+					unset($result);
+					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
+				}
+				$this->repository_model->insert_latest_commit($data['table'],$username,$reponame,$latest);
+			}
+			else
+			{
+				$HEAD = 'HEAD';
+				$flag = FALSE;
+				unset($result);
+				exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
+
+				while($data['HEAD'] != $result[0])
+				{
+					$flag = TRUE;
+				}
+				if($flag)
+					$this->repository_model->insert_latest_commit($data['table'],$username,$reponame,$latest);
+			}
+			$this->load->view('header');
+			//$this->load->view();
+			$this->load->view('footer');
 		}
- */
 	}
 }
 
