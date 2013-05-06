@@ -163,15 +163,31 @@ class Install_model extends CI_Model {
 					message TEXT,
 					PRIMARY KEY (username,repo_name,commit)
 				)';
+
 			// 创建 trees 表
+			$trees_sql = 'CREATE TABLE trees(
+					username VARCHAR(20) NOT NULL,
+					repo_name VARCHAR(20) NOT NULL,
+					SHA CHAR(40) NOT NULL,
+					dir_name VARCHAR(50),
+					PRIMARY KEY(username,repo_name,SHA)
+				)';
+
 			// 创建 blobs 表
-	//		if(!mkdir('./gitosis-conf'))
-	//		{
-	//			$msg['flag'] = FALSE;
-	//			$msg['remind']['error'] = 'gitosis-conf 文件夹创建失败!	请检查相应权限!';
-	//			return $msg;
-	//		}
-			if(mysql_query($user_sql) && mysql_query($res_sql) && mysql_query($fork_sql) && mysql_query($create_sql) && mysql_query($parti_sql) && mysql_query($regist_sql) && mysql_query($regist_sql_insert)  && mysql_query($user_sql_insert) && mysql_query($commits_sql))
+			$blobs_sql = 'CREATE TABLE blobs(
+					username VARCHAR(20) NOT NULL,
+					repo_name VARCHAR(2-) NOT NULL,
+					SHA CHAR(40) NOT NULL,
+					file_name VARCHAR(50),
+					PRIMARY KEY(username,repo_name,SHA)
+				)';
+
+			if(mysql_query($user_sql) && mysql_query($res_sql) &&
+				mysql_query($fork_sql) && mysql_query($create_sql) &&
+			   	mysql_query($parti_sql)	&& mysql_query($regist_sql)	&& 
+				mysql_query($regist_sql_insert)  && mysql_query($user_sql_insert) &&
+				mysql_query($commits_sql) && mysql_query($trees_sql) &&
+				mysql_query($blobs_sql))
 			{
 				mysql_close($con);
 				$msg['flag'] = TRUE;

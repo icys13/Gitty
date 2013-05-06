@@ -160,6 +160,32 @@ class Repository_model extends CI_Model {
 		$this->db->query($query);
 	}
 
+	// 删除 trees 表中相应项目
+	public function del_trees($data)
+	{
+		$this->db->delete('trees',$data);
+	}
+
+	// 插入 trees 表中相应项目
+	public function insert_trees($data)
+	{
+		$query = $this->db->insert_string('trees',$data);
+		$this->db->query($query);
+	}
+
+	// 插入 blobs 表行应项目
+	public function del_blobs($data)
+	{
+		$this->db->delete('blobs',$data);	
+	}
+
+	// 插入 blobs 表中相应项目
+	public function insert_blobs($data)
+	{
+		$query = $this->db->insert_string('blobs',$data);
+		$this->db->query($query);
+	}
+	
 	public function create_repo($data)
 	{
 		// 插入数据到数据库

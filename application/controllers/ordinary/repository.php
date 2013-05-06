@@ -46,6 +46,7 @@ class Repository extends Users {
 				$tree = array();
 				exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
 				print_r($tree);	
+				$this->ls_tree($username,$reponame,$tree);
 
 				while($HEAD != $result[0])
 				{
@@ -78,6 +79,8 @@ class Repository extends Users {
 				{
 					$tree = array();
 					exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
+					print_r($tree);
+					$this->ls_tree($tree);
 					$flag = TRUE;
 				}
 
@@ -144,6 +147,30 @@ class Repository extends Users {
 			$data['message'] .=$content[$j]."\n";
 		}
 		return $data;
+	}
+
+	private function ls_tree($username,$reponame,$tree)
+	{
+		$size = count($tree);
+		$temp = array();
+		$this->repository_model->del_trees(array('username' => $username,'repo_name' => $reponame));
+		$this->repository_model->del_blobs(array('username' => $username,'repo_name' => $reponame));
+
+		for($i = 0;$i < $size;$i++)
+		{
+			$temp = explode(" ",$tree[$i]);
+			print_r($temp);
+			if($temp[1] == 'blob')
+			{
+				// 文件
+				$this->repository_model->insert_blobs(array('username' => $username,'repo_name' => $reponame,'SHA' => substr($temp[2],0,40),'file_name' => substr($temp[2],40)));
+			}
+			else
+			{
+				// 目录
+				$this->repository_model->insert_trees(array('username' => $username,'repo_name' => $reponame,'SHA' => substr($temp[2],0,40),'dir_name' => substr($temp[2],40)));
+			}
+		}
 	}
 }
 
