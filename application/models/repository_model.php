@@ -155,7 +155,6 @@ class Repository_model extends CI_Model {
 	// 插入 commits 表
 	public function insert_commits($data)
 	{
-		print_r($data);
 		$data['date'] = date("Y-m-d",$data['date']); 
 		$query = $this->db->insert_string('commits',$data);
 		$this->db->query($query);

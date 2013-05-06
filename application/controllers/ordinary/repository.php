@@ -37,10 +37,16 @@ class Repository extends Users {
 			$content = array();
 			exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 			$latest = $result[0];
-			print_r($result);
+
 			if(empty($data['HEAD']))
 			{
-				$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$result[0]);
+				$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$latest);
+
+				// ls-tree
+				$tree = array();
+				exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
+				print_r($tree);	
+
 				while($HEAD != $result[0])
 				{
 					// 获取commits详细信息
@@ -66,8 +72,14 @@ class Repository extends Users {
 				unset($result);
 
 				exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
+
+				// 版本库有更新
 				if($data['HEAD'] != $result[0])
+				{
+					$tree = array();
+					exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
 					$flag = TRUE;
+				}
 
 				while($data['HEAD'] != $result[0])
 				{
