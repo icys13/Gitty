@@ -42,13 +42,19 @@ class Repository extends Users {
 				while($HEAD != $result[0])
 				{
 					// 获取commits详细信息
-					// ....
-					$this->repository_model->insert_commits('commits',$username,$reponame,$result[0]);
-					$HEAD = $HEAD.'^';
+					//$this->repository_model->insert_commits($username,$reponame,$result[0]);
+					$content = array();
+					//	exec("./scripts/cat-file.sh $username $reponame -p $HEAD",$content);
+					exec('./scripts/cat-file.sh ikimi second -p 7ecd',$content);
+					print_r($content);
+					unset($content);
+					echo $result[0].'<br/>';
+					$HEAD = $result[0].'^';
+				//	echo $HEAD.'<br/>';
 					unset($result);
 					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
-				$this->repository_model->insert_latest_commit($data['table'],$username,$reponame,$latest);
+		//		$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
 			}
 			else
 			{
@@ -56,18 +62,32 @@ class Repository extends Users {
 				$flag = FALSE;
 				unset($result);
 				exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
-
+				if($data['HEAD'] != $result[0])
+					$flag = TRUE;
 				while($data['HEAD'] != $result[0])
 				{
-					$flag = TRUE;
+					// 获取 commits 详细信息
+					//$this->repository_model->insert_commits($username,$reponame.$result[0]);
+					echo $result[0];
+					$HEAD = $result[0].'^';
+				//	echo $HEAD.'<br/>';
+					unset($result);
+					exec("./scripts/rev-parse.sh $username $reponame $HEAD",$result);
 				}
-				if($flag)
-					$this->repository_model->insert_latest_commit($data['table'],$username,$reponame,$latest);
+				echo $result[0];
+		//		if($flag)
+		//			$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame,'SHA' => $latest));
 			}
 			$this->load->view('header');
 			//$this->load->view();
 			$this->load->view('footer');
 		}
+	}
+
+	// 将 commit 信息数据库化
+	private function format($content)
+	{
+		
 	}
 }
 

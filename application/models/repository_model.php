@@ -125,13 +125,15 @@ class Repository_model extends CI_Model {
 		return false;
 	}
 
-	public function commits_init($username,$reponame)
+	// 插入最新 commit 表
+	public function insert_latest_commit($table,$data)
 	{
-	
+		$query = $this->db->insert_string($table,$data);
+		$this->db->queryy($query);
 	}
 
-	// 检查 commits 是否更新
-	public function commits_update($username,$reponame)
+	// 插入 commits 表
+	public function insert_commits($data)
 	{
 	}
 
