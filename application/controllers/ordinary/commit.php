@@ -14,7 +14,6 @@ class Commit extends Users {
 	public function index($username,$reponame)
 	{
 		$data = $this->repository_model->select_commits($username,$reponame);
-	//	print_r($data);
 
 		// 获取当前提交的分支
 		$msg['commits_title'] = $data[0]['commit'];
@@ -40,6 +39,20 @@ class Commit extends Users {
 		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame));
 		$this->load->view('ordinary/commits',$msg);
 		$this->load->view('footer');
+	}
+
+	// 比较两次提交之间的差异
+	public function detail($username,$reponame,$SHA)
+	{
+
+		// 脚本执行前准备
+		$diff = array();
+
+		// 父提交
+		$parent = $SHA.'^';
+
+		exec("./scripts/diff.sh $username $reponame $parent $SHA",$diff);
+		print_r($diff);
 	}
 
 }

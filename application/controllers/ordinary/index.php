@@ -13,11 +13,10 @@ class Index extends Users {
 	// 普通用户主页
 	public function index()
 	{
-	//	$profile = $this->show_profile();
-		$msg1 = $this->show_profile();
+		$msg1 = $this->show_profile($this->username);
 		$msg1['username'] = $this->username;
 
-		$creates = $this->show_creates();
+		$creates = $this->show_creates($this->username);
 		if(count($creates))
 		{
 			$msg2['creates'] = '';
@@ -32,7 +31,7 @@ class Index extends Users {
 		else
 			$msg2['creates'] = '<p class="repo-nothing">没有项目</p>';
 
-		$forks = $this->show_forks();
+		$forks = $this->show_forks($this->username);
 		if(count($forks))
 		{
 			$msg2['forks'] = '';
@@ -47,7 +46,7 @@ class Index extends Users {
 		else
 			$msg2['forks'] = '<p class="repo-nothing">没有项目</p>';
 
-		$participates = $this->show_participates();
+		$participates = $this->show_participates($this->username);
 		if(count($participates))
 		{
 			$msg2['participates'] = '';
@@ -68,31 +67,89 @@ class Index extends Users {
 		$this->load->view('footer');
 	}
 
+	// 浏览某用户首页 (代码同 index )
+	public function user($username)
+	{
+		$msg1 = $this->show_profile($username);
+		$msg1['username'] = $username;
+
+		$creates = $this->show_creates($username);
+		if(count($creates))
+		{
+			$msg2['creates'] = '';
+			foreach($creates as $item)
+			{
+				$msg2['creates'] .= '<div class="repo">';
+				$msg2['creates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['creates'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['creates'] .= '<p class="update-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
+			}
+		}
+		else 
+			$msg2['creates'] = '<p class="repo-nothing">没有项目</p>';
+		
+		$forks = $this->show_forks($username);
+		if(count($forks))
+		{
+			$msg2['forks'] = '';
+			foreach($forks as $item)
+			{
+				$msg2['forks'] .= '<div class="repo">';
+				$msg2['forks'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['owner'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['forks'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['forks'] .= '<p class="update-at"><i class="icon-time"></i>克隆于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
+			}
+		}
+		else
+			$msg2['forks'] = '<p class="repo-nothing">没有项目</p>';
+
+		$participates = $this->show_participates($username);
+		if(count($participates))
+		{
+			$msg2['participates'] = '';
+			foreach($participates as $item)
+			{
+				$msg2['participates'] .= '<div class="repo">';
+				$msg2['participates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['participates'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['participates'] .= '<p class="update-at"><i class="icon-time"></i>克隆于 '.$item['creator_date'].",更新于 ".$item['update_date'].'</p></div>';
+			}
+		}
+		else
+			$msg2['participates'] = '<p class="repo-nothing">没有项目</p>';
+
+		$this->load->view('header');
+		$this->load->view('ordinary/profile',$msg1);
+		$this->load->view('ordinary/repo',$msg2);
+		$this->load->view('footer');
+
+	}
+
 	// 显示个人信息 full_name & location & join in date
-	private function show_profile()
+	private function show_profile($username)
 	{		
-		$data['date'] = $this->user_model->select_date($this->username);	
-		$data['full_name'] = $this->user_model->select_full_name($this->username);
-		$data['location'] = $this->user_model->select_location($this->username);
+		$data['date'] = $this->user_model->select_date($username);	
+		$data['full_name'] = $this->user_model->select_full_name($username);
+		$data['location'] = $this->user_model->select_location($username);
 		return $data;
 	}
 
 	// 显示独自创建的项目
-	private function show_creates()
+	private function show_creates($username)
 	{
-		return $this->repository_model->select_creates($this->username);
+		return $this->repository_model->select_creates($username);
 	}
 
 	// 显示 fork 的项目
-	private function show_forks()
+	private function show_forks($username)
 	{
-		return $this->repository_model->select_forks($this->username);
+		return $this->repository_model->select_forks($username);
 	}
 
 	// 显示 participate 的项目
-	private function show_participates()
+	private function show_participates($username)
 	{
-		return $this->repository_model->select_participates($this->username);
+		return $this->repository_model->select_participates($username);
 	}
 
 	// 用户创建项目
@@ -142,7 +199,7 @@ class Index extends Users {
 
 			foreach($users as $item)
 			{
-				$msg['users'] .= '<li><a href="">'.$item['username'];
+				$msg['users'] .= '<li><a href="'.base_url().'index.php/ordinary/index/user/'.$item['username'].'">'.$item['username'];
 				$msg['users'] .= '</a><span class="location"><i class="icon-map-marker"></i>'.$item['location'].'</span>';
 				$msg['users'] .= '<span class="date"><i></i>'.$item['date'].'</span></li>';
 			}
@@ -150,17 +207,17 @@ class Index extends Users {
 			foreach($repos['creates'] as $item)
 			{
 				$msg['repos'] .= '<div class="repo"><div class="cf"><div class="repo-info">';
-				$msg['repos'] .= '<h5><a href="">'.$item['username'].'/'.$item['repo_name'].'</a></h5></div></div></div>';
+				$msg['repos'] .= '<h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['username'].'/'.$item['repo_name'].'">'.$item['username'].' / '.$item['repo_name'].'</a></h5></div></div></div>';
 			}
 			foreach($repos['forks'] as $item)
 			{
 				$msg['repos'] .= '<div class="repo"><div class="cf"><div class="repo-info">';
-				$msg['repos'] .= '<h5><a href="">'.$item['username'].'/'.$item['repo_name'].'-------克隆于 '.$item['creator'].'</a></h5></div></div></div>';
+				$msg['repos'] .= '<h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['username'].'/'.$item['repo_name'].'">'.$item['username'].' / '.$item['repo_name'].'-------克隆于 '.$item['creator'].'</a></h5></div></div></div>';
 			}
 			foreach($repos['participates'] as $item)
 			{
 				$msg['repos'] .= '<div class="repo"><div class="cf"><div class="repo-info">';
-				$msg['repos'] .= '<h5><a href="">'.$item['username'].'/'.$item['repo_name'].'-------发起于 '.$item['creator'].'</a></h5></div></div></div>';
+				$msg['repos'] .= '<h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['username'].'/'.$item['repo_name'].'">'.$item['username'].' / '.$item['repo_name'].'-------发起于 '.$item['creator'].'</a></h5></div></div></div>';
 			}
 			$msg['repos'] .= '</div>';
 

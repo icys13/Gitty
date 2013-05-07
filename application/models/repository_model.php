@@ -83,6 +83,9 @@ class Repository_model extends CI_Model {
 		// 模糊查询参与项目
 		$this->db->like(array('repo_name' => $keyword));
 		$this->db->select('repo_name,username,creator');
+		$query = $this->db->get('participates');
+		$result['participates'] = $query->result_array();
+
 		return $result;
 	}
 
