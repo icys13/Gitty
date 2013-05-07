@@ -108,6 +108,7 @@ class Repository extends Users {
 			$browser = $this->tree_browser($username,$reponame);
 			$browser['username'] = $username;
 			$browser['repo_name'] = $reponame;
+			$browser['path'] = $reponame;
 			$this->load->view('ordinary/tree_browser',$browser);
 
 			// README.md(README)文件内容(如果存在的话)

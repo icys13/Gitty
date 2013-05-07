@@ -9,11 +9,12 @@ class Tree extends Users {
 		parent::__construct();
 	}
 
-	public function index($username,$reponame,$SHA)
+	public function index($username,$reponame,$SHA,$path,$dir_name)
 	{
 		$data = array();
 		$blobs = array();
 		$trees = array();
+		$path .= ' / '.$dir_name;
 		exec("./scripts/ls-tree.sh $username $reponame $SHA",$data);
 		$size = count($data);	
 		$i = 0;$j = 0;$k = 0;
@@ -33,12 +34,10 @@ class Tree extends Users {
 				$k++;
 			}
 		}
-		//print_r(array('trees' => $trees,'blobs' => $blobs));
 		$this->load->view('header');
-		$this->load->view('ordinary/tree_browser',array('username' => $username,'repo_name' => $reponame,'trees' =>$trees,'blobs' => $blobs));
+		$this->load->view('ordinary/tree_browser',array('username' => $username,'repo_name' => $reponame,'path' => $path,'trees' =>$trees,'blobs' => $blobs));
 		$this->load->view('ordinary/no_file',array('error' => '请在左边栏选择文件或文件夹。'));
 		$this->load->view('footer');
-		//print_r($data);
 	}
 }
 

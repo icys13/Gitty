@@ -9,10 +9,11 @@ class Blob extends Users {
 		parent::__construct();
 	}
 	
-	public function index($username,$reponame,$SHA)
+	public function index($username,$reponame,$SHA,$path,$file_name)
 	{
 		$data = array();
 		$result = array();
+		$path .= ' / '.$filename;
 		exec("./scripts/cat-file.sh $username $reponame -p $SHA",$data);
 		foreach($data as $item)
 			echo $item.'<br/>';
