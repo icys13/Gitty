@@ -32,13 +32,13 @@ if(!empty($trees))
 {
 	$size = count($trees);
 	for($i = 0;$i < $size;$i++)
-		echo '<li><i class="icon-folder"></i><a href="">'.$trees[$i].'</a></li>';
+		echo '<li><i class="icon-folder"></i><a href="'.base_url().'index.php/ordinary/tree/index/'.$username.'/'.$repo_name.'/'.$trees[$i]['SHA'].'">'.$trees[$i]['dir_name'].'</a></li>';
 }
 if(!empty($blobs))
 {
 	$size = count($blobs);
 	for($i = 0;$i < $size;$i++)
-		echo '<li><i class="icon-folder"></i><a href="">'.$blobs[$i].'</a></li>';
+		echo '<li><i class="icon-file"></i><a href="'.base_url().'index.php/ordinary/blob/index/'.$username.'/'.$repo_name.'/'.$blobs[$i]['SHA'].'">'.$blobs[$i]['file_name'].'</a></li>';
 }
 ?>
 				</ul>

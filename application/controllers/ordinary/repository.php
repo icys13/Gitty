@@ -45,7 +45,6 @@ class Repository extends Users {
 				// ls-tree
 				$tree = array();
 				exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
-				print_r($tree);	
 				$this->ls_tree($username,$reponame,$tree);
 
 				while($HEAD != $result[0])
@@ -79,7 +78,7 @@ class Repository extends Users {
 				{
 					$tree = array();
 					exec("./scripts/ls-tree.sh $username $reponame $latest",$tree);
-					$this->ls_tree($tree);
+					$this->ls_tree($username,$reponame,$tree);
 					$flag = TRUE;
 				}
 
@@ -124,7 +123,7 @@ class Repository extends Users {
 			else
 			{
 				//$msg['flag'] = FALSE;
-				$this->load->view('ordinary/no_file');
+				$this->load->view('ordinary/no_file',array('error' => 'README.md还没有编辑,立即编辑README.md。'));
 			}
 
 			$this->load->view('footer');
@@ -133,24 +132,28 @@ class Repository extends Users {
 
 	private function tree_browser($username,$reponame)
 	{
-		$this->db->select('dir_name');
+		$this->db->select('SHA,dir_name');
 		$this->db->order_by('dir_name');
 		$query = $this->db->get_where('trees',array('username' => $username, 'repo_name' => $reponame));
 		$result = $query->result_array();
 		$trees = array();
+		$i = 0;
 		foreach($result as $item)
 		{
-			$trees[] = $item['dir_name'];
+			$trees[$i]['dir_name'] = $item['dir_name'];
+			$trees[$i++]['SHA'] = $item['SHA'];
 		}
 
-		$this->db->select('file_name');
+		$this->db->select('SHA,file_name');
 		$this->db->order_by('file_name','asc');
 		$query = $this->db->get_where('blobs',array('username' => $username,'repo_name' => $reponame));
 		$result = $query->result_array();
 		$blobs = array();
+		$i = 0;
 		foreach($result as $item)
 		{
-			$blobs[] = $item['file_name'];
+			$blobs[$i]['file_name'] = $item['file_name'];
+			$blobs[$i++]['SHA'] = $item['SHA'];
 		}
 		return array('trees' => $trees,'blobs' => $blobs);
 	}
