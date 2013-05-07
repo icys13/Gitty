@@ -66,6 +66,14 @@ class Repository_model extends CI_Model {
 		return $result;
 	}
 
+	// 查询某次提交
+	public function select_commit($data)
+	{
+		$this->db->select('username,repo_name,commit,parent,date,message');
+		$query = $this->db->get_where('commits',$data);
+		return $query->row_array();
+	}
+
 	public function search($keyword)
 	{
 		// 模糊查询创建的项目

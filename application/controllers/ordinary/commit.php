@@ -45,6 +45,9 @@ class Commit extends Users {
 	public function detail($username,$reponame,$SHA)
 	{
 
+		// 获得更详细信息
+		$data = $this->repository_model->select_commit(array('username' => $username,'repo_name' => $reponame,'commit' => $SHA));
+
 		// 脚本执行前准备
 		$diff = array();
 
@@ -52,9 +55,13 @@ class Commit extends Users {
 		$parent = $SHA.'^';
 
 		exec("./scripts/diff.sh $username $reponame $parent $SHA",$diff);
-		print_r($diff);
-	}
+		//print_r($diff);
 
+		$this->load->view('header');
+		$this->load->view('ordinary/diff_header',$data);
+		//$this->load->view('ordinary/diff');
+		$this->load->view('footer');
+	}
 }
 
 /* End of file:commit.php */

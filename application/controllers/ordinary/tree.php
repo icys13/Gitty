@@ -9,12 +9,13 @@ class Tree extends Users {
 		parent::__construct();
 	}
 
-	public function index($username,$reponame,$SHA,$path,$dir_name)
+	public function index($username,$reponame,$SHA,$path,$dir_name='')
 	{
 		$data = array();
 		$blobs = array();
 		$trees = array();
-		$path .= ' / '.$dir_name;
+		if(!empty($dir_name))
+			$path .= '/'.$dir_name;
 		exec("./scripts/ls-tree.sh $username $reponame $SHA",$data);
 		$size = count($data);	
 		$i = 0;$j = 0;$k = 0;
