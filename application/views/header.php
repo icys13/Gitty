@@ -12,4 +12,3 @@
 			<div class="inner cf">
 				<!-- [if lt IE 9]><p class="chromeframe alert alert-error"><i class="icon-exclamation-sign"></i>我们强烈建议您<a href="http://browsehappy.com">升级浏览器</a>,
 				或<a href="http://www.google.com/chrome/chromeframe">安装 Google Chrome 浏览器内嵌框架</a>。</a><![endif]-->
-			</div>

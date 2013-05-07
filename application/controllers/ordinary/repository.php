@@ -114,10 +114,18 @@ class Repository extends Users {
 			// README.md(README)文件内容(如果存在的话)
 			$file = 'README.md';
 			$preview = $this->preview($username,$reponame,$file);
-
-			$msg['file'] = array();
-			exec("./scripts/cat-file.sh $username $reponame -p {$preview['SHA']}",$msg['file']);
-			$this->load->view('ordinary/preview',$msg);
+			
+			if(!empty($preview))
+			{
+				$msg['file'] = array();
+				exec("./scripts/cat-file.sh $username $reponame -p {$preview['SHA']}",$msg['file']);
+				$this->load->view('ordinary/preview',$msg);
+			}
+			else
+			{
+				//$msg['flag'] = FALSE;
+				$this->load->view('ordinary/no_file');
+			}
 
 			$this->load->view('footer');
 		}

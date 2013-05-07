@@ -2,12 +2,6 @@
 	<div class="file-meta"></div>
 	<div class="commit"></div>
 	<article class="file-content">
-		<div class="markdown">
-		<?=$file[0]?>
-		</div>	
+		<h2>No file README.md!</h2>
 	</article>
-</div>
-</div>
-</div>
-</div>
 </div>
