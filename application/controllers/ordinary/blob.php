@@ -13,7 +13,7 @@ class Blob extends Users {
 	{
 		$data = array();
 		$result = array();
-		$path .= ' / '.$filename;
+		$path .= ' / '.$file_name;
 		exec("./scripts/cat-file.sh $username $reponame -p $SHA",$data);
 		foreach($data as $item)
 			echo $item.'<br/>';

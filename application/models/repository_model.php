@@ -56,6 +56,16 @@ class Repository_model extends CI_Model {
 		return $result;
 	}
 
+	// 查询提交历史
+	public function select_commits($username,$reponame)
+	{
+		$this->db->select('date,committer,message,commit');
+		$this->db->order_by('date','desc');
+		$query = $this->db->get_where('commits',array('username' => $username,'repo_name' => $reponame));
+		$result = $query->result_array();
+		return $result;
+	}
+
 	public function search($keyword)
 	{
 		// 模糊查询创建的项目
@@ -155,7 +165,7 @@ class Repository_model extends CI_Model {
 	// 插入 commits 表
 	public function insert_commits($data)
 	{
-		$data['date'] = date("Y-m-d",$data['date']); 
+		$data['date'] = date("Y-m-d H:i:s",$data['date']); 
 		$query = $this->db->insert_string('commits',$data);
 		$this->db->query($query);
 	}

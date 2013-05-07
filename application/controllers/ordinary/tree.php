@@ -35,7 +35,8 @@ class Tree extends Users {
 			}
 		}
 		$this->load->view('header');
-		$this->load->view('ordinary/tree_browser',array('username' => $username,'repo_name' => $reponame,'path' => $path,'trees' =>$trees,'blobs' => $blobs));
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame));
+		$this->load->view('ordinary/tree_browser',array('path' => $path,'trees' =>$trees,'blobs' => $blobs));
 		$this->load->view('ordinary/no_file',array('error' => '请在左边栏选择文件或文件夹。'));
 		$this->load->view('footer');
 	}

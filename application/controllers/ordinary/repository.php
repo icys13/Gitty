@@ -105,9 +105,9 @@ class Repository extends Users {
 			$this->load->view('header');
 
 			// 项目文件结构
+			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame));
+
 			$browser = $this->tree_browser($username,$reponame);
-			$browser['username'] = $username;
-			$browser['repo_name'] = $reponame;
 			$browser['path'] = $reponame;
 			$this->load->view('ordinary/tree_browser',$browser);
 
@@ -117,13 +117,15 @@ class Repository extends Users {
 			
 			if(!empty($preview))
 			{
-				$msg['file'] = array();
-				exec("./scripts/cat-file.sh $username $reponame -p {$preview['SHA']}",$msg['file']);
+				$temp = array();
+				$msg['file'] = '';
+				exec("./scripts/cat-file.sh $username $reponame -p {$preview['SHA']}",$temp);
+				foreach($temp as $item)
+					$msg['file'] .= $item.'<br/>';
 				$this->load->view('ordinary/preview',$msg);
 			}
 			else
 			{
-				//$msg['flag'] = FALSE;
 				$this->load->view('ordinary/no_file',array('error' => 'README.md还没有编辑,立即编辑README.md。'));
 			}
 

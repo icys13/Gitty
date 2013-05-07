@@ -159,7 +159,7 @@ class Install_model extends CI_Model {
 					parent CHAR(40),
 					author VARCHAR(20),
 					committer VARCHAR(20),
-					date DATE,
+					date DATETIME,
 					message TEXT,
 					PRIMARY KEY (username,repo_name,commit)
 				)';
@@ -176,7 +176,7 @@ class Install_model extends CI_Model {
 			// 创建 blobs 表
 			$blobs_sql = 'CREATE TABLE blobs(
 					username VARCHAR(20) NOT NULL,
-					repo_name VARCHAR(2-) NOT NULL,
+					repo_name VARCHAR(20) NOT NULL,
 					SHA CHAR(40) NOT NULL,
 					file_name VARCHAR(50),
 					PRIMARY KEY(username,repo_name,SHA)
