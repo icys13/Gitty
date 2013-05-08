@@ -62,17 +62,39 @@ class Commit extends Users {
 		$data = $this->repository_model->select_commit(array('username' => $username,'repo_name' => $reponame,'commit' => $SHA));
 
 		// 脚本执行前准备
-		$diff = array();
+		$log = array();
+		
+		// 获得版本差异的简易版本
+		exec("./scripts/log.sh $username $reponame $SHA",$log);
+
+		// 获取更改的文件列表
+		$size = count($log);
+		for($j = 0,$i = 1;$i < $size - 1;$i++,$j++)
+		{
+			$tmp = explode(' ',$log[$i]);
+			$toc[$j] = $tmp[1];
+		}
 
 		// 父提交
 		$parent = $SHA.'^';
 
-		exec("./scripts/diff.sh $username $reponame $parent $SHA",$diff);
-		//print_r($diff);
+		// 利用 git diff 获得文件的行变化
+		unset($tmp);
+		$diff = '';
+		for($i = 0;$i < $size -2;$i++)
+		{
+			exec("./scripts/diff.sh $username $reponame $parent $SHA $toc[$i]",$tmp[$i]);
+			$diff .= '<div class="diff-view module" id="'.$toc[$i].'">';
+			$diff .= '<header class="module-hd"><h3>'.$toc[$i].'</h3></header>';
+			$diff .= '<div class="module-bd"><table cellpadding="0"><tbody>';
+			$diff .= '';
+			$diff .= '</tbody></table></div></div>';
+		}
 
 		$this->load->view('header');
 		$this->load->view('ordinary/diff_header',$data);
-		//$this->load->view('ordinary/diff');
+		$this->load->view('ordinary/toc',array('toc' => $toc));
+		$this->load->view('ordinary/diff',array('diff' => $diff));
 		$this->load->view('footer');
 	}
 }
