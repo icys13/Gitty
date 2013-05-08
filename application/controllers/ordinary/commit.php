@@ -83,11 +83,60 @@ class Commit extends Users {
 		$diff = '';
 		for($i = 0;$i < $size -2;$i++)
 		{
+			unset($tmp);
 			exec("./scripts/diff.sh $username $reponame $parent $SHA $toc[$i]",$tmp[$i]);
+
+			// 获取差异定位后的数据
+			$tmp = $this->locate($tmp[$i]);
+
 			$diff .= '<div class="diff-view module" id="'.$toc[$i].'">';
 			$diff .= '<header class="module-hd"><h3>'.$toc[$i].'</h3></header>';
 			$diff .= '<div class="module-bd"><table cellpadding="0"><tbody>';
-			$diff .= '';
+
+			// 格式处理
+			$tmp_size = count($tmp);
+			for($j = 1;$j < $tmp_size;$j++)
+			{
+				// 处理
+				$line_size = count($tmp[$j]);
+
+				// 第一行,差异定位行
+				$diff .= '<tr><td class="line-numbers">...</td>';
+				$diff .= '<td class="line-numbers">...</td>';
+				$diff .= '<td class=chunk><pre>'.$tmp[$j][0].'</pre></td></tr>';
+
+				// 差异定位信息解析
+				$locate = explode(',',$tmp[$j][0]);
+				$remove = substr($locate[0],4);
+				$add_array = explode('+',$locate[1]);
+				$add_array1 = explode(' ',$add_array[1]);
+				$add = $add_array1[0];
+
+				for($k = 1;$k < $line_size;$k++)
+				{
+					if($tmp[$j][$k][0] == '+')
+					{
+						$num1 = '';
+						$num2 = $add++;
+						$class = 'line-add';
+					}
+					elseif($tmp[$j][$k][0] == '-')
+					{
+						$num1 = $remove++;
+						$num2 = '';
+						$class = 'line-remove';
+					}
+					else
+					{
+						$num1 = $remove++;
+						$num2 = $add++;
+						$class = '';
+					}
+					$diff .= '<tr><td class="line-numbers">'.$num1.'</td>';
+					$diff .= '<td class="line-numbers">'.$num2.'</td>';
+					$diff .= '<td class="'.$class.'"><pre>'.$tmp[$j][$k].'</pre></td></tr>';
+				}
+			}
 			$diff .= '</tbody></table></div></div>';
 		}
 
@@ -97,6 +146,27 @@ class Commit extends Users {
 		$this->load->view('ordinary/diff',array('diff' => $diff));
 		$this->load->view('footer');
 	}
+
+	// 差异定位
+	private function locate($data)
+	{
+		$size = count($data);
+		$result = array();
+		for($j = 0,$i = 0;$i < $size;$i++)
+		{
+			if(('@@' == substr($data[$i],0,2)))
+			{
+				$j++;
+				$result[$j][] = $data[$i];
+			}
+			else
+			{
+				$result[$j][] = $data[$i];
+			}
+		}
+		return $result;
+	}
+
 }
 
 /* End of file:commit.php */
