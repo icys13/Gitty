@@ -8,18 +8,28 @@ class Repository_model extends CI_Model {
 		$this->load->database();
 	}	
 
-	public function select_creates($username)
+	public function select_creates($username,$reponame='')
 	{
-		$this->db->select('username,repo_name');
-		$query = $this->db->get_where('creates',array('username' => $username));
-		$temp = $query->result_array();
-		$result = array();
-
-		foreach($temp as $item)
+		if(empty($reponame))
 		{
-			$this->db->select('repo_name,creator,description,create_date,update_date');
-			$query = $this->db->get_where('repositories',array('repo_name' => $item['repo_name'],'creator' => $item['username'],'owner' => $item['username']));
-			$result[] = $query->row_array();
+			// 返回创建项目的列表
+			$this->db->select('username,repo_name');
+			$query = $this->db->get_where('creates',array('username' => $username));
+			$temp = $query->result_array();
+			$result = array();
+
+			foreach($temp as $item)
+			{
+				$this->db->select('repo_name,creator,description,create_date,update_date');
+				$query = $this->db->get_where('repositories',array('repo_name' => $item['repo_name'],'creator' => $item['username'],'owner' => $item['username']));
+				$result[] = $query->row_array();
+			}
+		}
+		else
+		{
+			// 返回某个项目的信息
+			$query = $this->db->get_where('creates',array('username' => $username,'repo_name' => $reponame));
+			$result = $query->row_array();
 		}
 		return $result;
 	}
@@ -72,6 +82,27 @@ class Repository_model extends CI_Model {
 		$this->db->select('username,repo_name,commit,parent,tree,date,message');
 		$query = $this->db->get_where('commits',$data);
 		return $query->row_array();
+	}
+
+	// 查询 repositories 表中项目的详细信息
+	public function select_repos($username,$reponame)
+	{
+		$query = $this->db->get_where('repositories',array('owner' => $username,'repo_name' => $reponame));
+		return $query->row_array();
+	}
+
+	// 将信息插入 forks 表
+	public function insert_forks($data)
+	{
+		$query = $this->db->insert_string('forks',$data);
+		$this->db->query($query);
+	}
+
+	// 将信息插入到 repositories 表
+	public function insert_repos($data)
+	{
+		$query = $this->db->insert_string('repositories',$data);
+		$this->db->query($query);
 	}
 
 	public function search($keyword)

@@ -12,7 +12,7 @@
 		<span title=""></span>
 	</div>
 	<a class="btn-download" href="<?=base_url()?>index.php/ordinary/repository/download/<?=$username?>/<?=$repo_name?>/<?=$SHA?>"><i class="icon"></i>下载(.tar.gz)</a>
-	<a class="btn-clone" href="#"><i class="icon arr"></i><i class="icon"></i>抓取</a>
+	<a class="btn-clone" href="<?=base_url()?>index.php/ordinary/repository/fork/<?=$username?>/<?=$repo_name?>"><i class="icon arr"></i><i class="icon"></i>派生</a>
 </div>
 <div class="sub-nav">
 	<div class="cf">

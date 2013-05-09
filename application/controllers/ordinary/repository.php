@@ -105,7 +105,7 @@ class Repository extends Users {
 			$this->load->view('header');
 
 			// 项目文件结构
-			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'sha' => $result[0]));
+			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $result[0]));
 
 			$browser = $this->tree_browser($username,$reponame);
 			$browser['path'] = $reponame;
@@ -167,6 +167,34 @@ class Repository extends Users {
 		$query = $this->db->get_where('blobs',array('username' => $username,'repo_name' => $reponame,'file_name' => $file));
 		$result = $query->row_array();
 		return $result;
+	}
+
+	// 派生模块
+	// fork $username,$reponame 的项目到，当前用户的 $reponame 中
+	public function fork($username,$reponame)
+	{
+		// 更新 repositories , forks 表
+		$data_repos = $this->repository_model->select_repos($username,$reponame);
+		$data_forks = $this->repository_model->select_creates($username,$reponame);
+
+		// 更改相应的数据
+		$data_repos['owner'] = $this->username;
+		//$data_repos['owner'] = 'Sir Alex';
+		$data_repos['creator'] = $username;
+		$data_repos['create_date'] = date("Y-m-d");
+		$data_repos['update_date'] = $data_repos['create_date'];
+
+		$data_forks['username'] = $this->username;
+		$data_forks['creator'] = $username;
+
+		// 向表中增加相应的数据
+		$this->repository_model->insert_repos($data_repos);
+		$this->repository_model->insert_forks($data_forks);
+
+		// 复制版本库
+		//
+		// 跳转到个人主页
+		redirect(site_url().'/ordinary/index');
 	}
 
 	// 下载模块
