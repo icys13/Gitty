@@ -105,7 +105,7 @@ class Repository extends Users {
 			$this->load->view('header');
 
 			// 项目文件结构
-			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame));
+			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'sha' => $result[0]));
 
 			$browser = $this->tree_browser($username,$reponame);
 			$browser['path'] = $reponame;
@@ -167,6 +167,21 @@ class Repository extends Users {
 		$query = $this->db->get_where('blobs',array('username' => $username,'repo_name' => $reponame,'file_name' => $file));
 		$result = $query->row_array();
 		return $result;
+	}
+
+	// 下载模块
+	// 下载 $username@reponame.git 版本库下的提交为 $SHA 的工作区文件
+	// 默认下载格式为 .tar.gz
+	public function download($username,$reponame,$SHA)
+	{
+		$data = array();
+		header('Content-type: application/octet.stream');
+		exec("./scripts/archive.sh $username $reponame $SHA",$data);
+		$tmp = '';
+		foreach($data as $item)
+			$tmp .= $item;
+		header('Content-Disposition: attachment;filename="'.$reponame.'_'.$SHA.'.tar.gz"');
+		echo $tmp; 
 	}
 
 	// 将 commit 信息数据库化

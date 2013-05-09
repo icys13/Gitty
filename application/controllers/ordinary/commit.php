@@ -49,7 +49,7 @@ class Commit extends Users {
 
 		// 载入模板
 		$this->load->view('header');
-		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame));
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $data[0]['commit']));
 		$this->load->view('ordinary/commits',$msg);
 		$this->load->view('footer');
 	}
@@ -182,6 +182,7 @@ class Commit extends Users {
 		}
 
 		$this->load->view('header');
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA));
 		$this->load->view('ordinary/diff_header',$data);
 		$this->load->view('ordinary/toc',array('toc' => $toc));
 		$this->load->view('ordinary/diff',array('diff' => $diff));
