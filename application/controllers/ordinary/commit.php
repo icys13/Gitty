@@ -84,25 +84,35 @@ class Commit extends Users {
 		if(empty($data['parent']))
 		{
 			// 获得此次提交的 tree
-			$tree = $data['tree'];
+			// 解析提交的 tree
+			$tree = array();
+			exec("./scripts/ls-tree.sh $username $reponame {$data['tree']}",$tree);
+			$size_tree = count($tree);
 
-			for($i = 0;$i < $size -2;$i++)
+			for($i = 0;$i < $size_tree;$i++)
 			{
+				// 解析 key , value 值
+				$tmp = explode(' ',$tree[$i]);
+				$key['key'] = substr($tmp[2],0,40);
+				$key['value'] = substr($tmp[2],41);
+
+				// 分析标题
 				unset($tmp);
-				exec("./scripts/cat-file.sh $username $reponame -p $toc[$i]",$tmp[$i]);
-				$diff .= '<div class="diff-view module" id="'.$toc[$i].'">';
-				$diff .= '<header class="module-hd"><h3>'.$toc[$i].'</h3></header>';
+				exec("./scripts/cat-file.sh $username $reponame -p {$key['key']}",$tmp);
+				$diff .= '<div class="diff-view module" id="'.$key['value'].'">';
+				$diff .= '<header class="module-hd"><h3>'.$key['value'].'</h3></header>';
 				$diff .= '<div class="module-bd"><table cellpadding="0"><tbody>';
 				$diff .= '<tr><td class="line-numbers">...</td>';
 				$diff .= '<td class="line-numbers">...</td>';
-				$diff .= '<td><pre>@@ -0,0 +1,'.count($tmp[$i]).' @@</pre></td></tr>';
+				$diff .= '<td class="chunk"><pre>@@ -0,0 +1,'.count($tmp).' @@</pre></td></tr>';
 				
-				$tmp_size = count($tmp[$i]);
-				for($j = 0;$j < $tmp_size;$j++)
+				// 显示内容
+				$tmp_size = count($tmp);
+				for($j = 1;$j <= $tmp_size;$j++)
 				{
 					$diff .= '<tr><td class="line-numbers"></td>';
-					$diff .= '<tr><td class="line-numbers">'.`$j+1`.'</td>';
-					$diff .= '<td class="line-add"><pre>'.$tmp[$i][$j].'</pre></td></tr>';
+					$diff .= '<td class="line-numbers">'.$j.'</td>';
+					$diff .= '<td class="line-add"><pre>'.$tmp[$j-1].'</pre></td></tr>';
 				}
 				$diff .= '</tbody></table></div></div>';
 			}
