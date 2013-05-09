@@ -78,66 +78,97 @@ class Commit extends Users {
 		// 父提交
 		$parent = $SHA.'^';
 
-		// 利用 git diff 获得文件的行变化
-		unset($tmp);
+		// 检查 SHA 是否为最初始的提交
+		// 此次提交已将是最原始提交
 		$diff = '';
-		for($i = 0;$i < $size -2;$i++)
+		if(empty($data['parent']))
 		{
-			unset($tmp);
-			exec("./scripts/diff.sh $username $reponame $parent $SHA $toc[$i]",$tmp[$i]);
+			// 获得此次提交的 tree
+			$tree = $data['tree'];
 
-			// 获取差异定位后的数据
-			$tmp = $this->locate($tmp[$i]);
-
-			$diff .= '<div class="diff-view module" id="'.$toc[$i].'">';
-			$diff .= '<header class="module-hd"><h3>'.$toc[$i].'</h3></header>';
-			$diff .= '<div class="module-bd"><table cellpadding="0"><tbody>';
-
-			// 格式处理
-			$tmp_size = count($tmp);
-			for($j = 1;$j < $tmp_size;$j++)
+			for($i = 0;$i < $size -2;$i++)
 			{
-				// 处理
-				$line_size = count($tmp[$j]);
-
-				// 第一行,差异定位行
+				unset($tmp);
+				exec("./scripts/cat-file.sh $username $reponame -p $toc[$i]",$tmp[$i]);
+				$diff .= '<div class="diff-view module" id="'.$toc[$i].'">';
+				$diff .= '<header class="module-hd"><h3>'.$toc[$i].'</h3></header>';
+				$diff .= '<div class="module-bd"><table cellpadding="0"><tbody>';
 				$diff .= '<tr><td class="line-numbers">...</td>';
 				$diff .= '<td class="line-numbers">...</td>';
-				$diff .= '<td class=chunk><pre>'.$tmp[$j][0].'</pre></td></tr>';
-
-				// 差异定位信息解析
-				$locate = explode(',',$tmp[$j][0]);
-				$remove = substr($locate[0],4);
-				$add_array = explode('+',$locate[1]);
-				$add_array1 = explode(' ',$add_array[1]);
-				$add = $add_array1[0];
-
-				for($k = 1;$k < $line_size;$k++)
+				$diff .= '<td><pre>@@ -0,0 +1,'.count($tmp[$i]).' @@</pre></td></tr>';
+				
+				$tmp_size = count($tmp[$i]);
+				for($j = 0;$j < $tmp_size;$j++)
 				{
-					if($tmp[$j][$k][0] == '+')
-					{
-						$num1 = '';
-						$num2 = $add++;
-						$class = 'line-add';
-					}
-					elseif($tmp[$j][$k][0] == '-')
-					{
-						$num1 = $remove++;
-						$num2 = '';
-						$class = 'line-remove';
-					}
-					else
-					{
-						$num1 = $remove++;
-						$num2 = $add++;
-						$class = '';
-					}
-					$diff .= '<tr><td class="line-numbers">'.$num1.'</td>';
-					$diff .= '<td class="line-numbers">'.$num2.'</td>';
-					$diff .= '<td class="'.$class.'"><pre>'.$tmp[$j][$k].'</pre></td></tr>';
+					$diff .= '<tr><td class="line-numbers"></td>';
+					$diff .= '<tr><td class="line-numbers">'.`$j+1`.'</td>';
+					$diff .= '<td class="line-add"><pre>'.$tmp[$i][$j].'</pre></td></tr>';
 				}
+				$diff .= '</tbody></table></div></div>';
 			}
-			$diff .= '</tbody></table></div></div>';
+		}
+		else 
+		{
+			// 利用 git diff 获得文件的行变化
+			unset($tmp);
+			for($i = 0;$i < $size -2;$i++)
+			{
+				unset($tmp);
+				exec("./scripts/diff.sh $username $reponame $parent $SHA $toc[$i]",$tmp[$i]);
+	
+				// 获取差异定位后的数据
+				$tmp = $this->locate($tmp[$i]);
+	
+				$diff .= '<div class="diff-view module" id="'.$toc[$i].'">';
+				$diff .= '<header class="module-hd"><h3>'.$toc[$i].'</h3></header>';
+				$diff .= '<div class="module-bd"><table cellpadding="0"><tbody>';
+	
+				// 格式处理
+				$tmp_size = count($tmp);
+				for($j = 1;$j < $tmp_size;$j++)
+				{
+					// 处理
+					$line_size = count($tmp[$j]);
+	
+					// 第一行,差异定位行
+					$diff .= '<tr><td class="line-numbers">...</td>';
+					$diff .= '<td class="line-numbers">...</td>';
+					$diff .= '<td class=chunk><pre>'.$tmp[$j][0].'</pre></td></tr>';
+	
+					// 差异定位信息解析
+					$locate = explode(',',$tmp[$j][0]);
+					$remove = substr($locate[0],4);
+					$add_array = explode('+',$locate[1]);
+					$add_array1 = explode(' ',$add_array[1]);
+					$add = $add_array1[0];
+	
+					for($k = 1;$k < $line_size;$k++)
+					{
+						if($tmp[$j][$k][0] == '+')
+						{
+							$num1 = '';
+							$num2 = $add++;
+							$class = 'line-add';
+						}
+						elseif($tmp[$j][$k][0] == '-')
+						{
+							$num1 = $remove++;
+							$num2 = '';
+							$class = 'line-remove';
+						}
+						else
+						{
+							$num1 = $remove++;
+							$num2 = $add++;
+							$class = '';
+						}
+						$diff .= '<tr><td class="line-numbers">'.$num1.'</td>';
+						$diff .= '<td class="line-numbers">'.$num2.'</td>';
+						$diff .= '<td class="'.$class.'"><pre>'.$tmp[$j][$k].'</pre></td></tr>';
+					}
+				}
+				$diff .= '</tbody></table></div></div>';
+			}
 		}
 
 		$this->load->view('header');

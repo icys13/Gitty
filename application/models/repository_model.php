@@ -69,7 +69,7 @@ class Repository_model extends CI_Model {
 	// 查询某次提交
 	public function select_commit($data)
 	{
-		$this->db->select('username,repo_name,commit,parent,date,message');
+		$this->db->select('username,repo_name,commit,parent,tree,date,message');
 		$query = $this->db->get_where('commits',$data);
 		return $query->row_array();
 	}
