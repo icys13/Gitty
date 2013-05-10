@@ -7,6 +7,7 @@ class Tree extends Users {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('repository_model');
 	}
 
 	public function index($username,$reponame,$SHA,$path,$dir_name='')
@@ -39,7 +40,8 @@ class Tree extends Users {
 			}
 		}
 		$this->load->view('header');
-		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA));
+		$temp = $this->repository_model->select_repos($username,$reponame);
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA,'message' => $temp['description']));
 		$this->load->view('ordinary/tree_browser',array('path' => $path,'trees' =>$trees,'blobs' => $blobs));
 
 		// 代码首页,查找 README.md 文件,如果查找到则显示

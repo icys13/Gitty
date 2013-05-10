@@ -49,7 +49,8 @@ class Commit extends Users {
 
 		// 载入模板
 		$this->load->view('header');
-		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $data[0]['commit']));
+		$temp = $this->repository_model->select_repos($username,$reponame);
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $data[0]['commit'],'message' => $temp['description']));
 		$this->load->view('ordinary/commits',$msg);
 		$this->load->view('footer');
 	}
@@ -198,6 +199,7 @@ class Commit extends Users {
 		{
 			if(('@@' == substr($data[$i],0,2)))
 			{
+			
 				$j++;
 				$result[$j][] = $data[$i];
 			}
@@ -208,7 +210,6 @@ class Commit extends Users {
 		}
 		return $result;
 	}
-
 }
 
 /* End of file:commit.php */

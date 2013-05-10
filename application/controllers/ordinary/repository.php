@@ -105,7 +105,8 @@ class Repository extends Users {
 			$this->load->view('header');
 
 			// 项目文件结构
-			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $result[0]));
+			$temp = $this->repository_model->select_repos($username,$reponame);
+			$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $result[0],'message' => $temp['description']));
 
 			$browser = $this->tree_browser($username,$reponame);
 			$browser['path'] = $reponame;

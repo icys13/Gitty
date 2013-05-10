@@ -1,12 +1,5 @@
 <div class="aside">
 	<div class="profile">
-		<div class="actions">
-			<span class="is-you">这是您本人!</span>
-			<a href="<?=base_url()?>index.php/ordinary/index/profile">
-				<i class="icon-edit"></i>
-				修改档案
-			</a>
-		</div>
 		<div class="info">
 			<h1>
 				<a href="">
