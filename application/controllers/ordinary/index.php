@@ -61,7 +61,7 @@ class Index extends Users {
 		else
 			$msg2['participates'] = '<p class="repo-nothing">没有项目</p>';
 
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $this->username,'title' => '欢迎来到 Gitty!'));
 		$this->load->view('ordinary/profile',$msg1);
 		$this->load->view('ordinary/repo',$msg2);
 		$this->load->view('footer');
@@ -118,7 +118,7 @@ class Index extends Users {
 		else
 			$msg2['participates'] = '<p class="repo-nothing">没有项目</p>';
 
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $username,'title' => '欢迎来到 Gitty!'));
 		$this->load->view('ordinary/profile',$msg1);
 		$this->load->view('ordinary/repo',$msg2);
 		$this->load->view('footer');
@@ -170,14 +170,14 @@ class Index extends Users {
 			$msg['repo_name'] = $data['repo_name'];
 
 			// 显示项目创建后的 向导 页面
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => '创建一个新的项目 - Gitty'));
 			$this->load->view('ordinary/guide',$msg);
 			$this->load->view('footer');
 		}
 		else
 		{
 			$msg['username'] = $this->username;
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => '创建一个新的项目 - Gitty'));
 			$this->load->view('ordinary/create_repo',$msg);
 			$this->load->view('footer');
 		}
@@ -221,14 +221,14 @@ class Index extends Users {
 			}
 			$msg['repos'] .= '</div>';
 
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => "搜索 $keyword-Gitty"));
 			$this->load->view('ordinary/search',$msg1);
 			$this->load->view('ordinary/search_corr',$msg);
 			$this->load->view('footer');
 		}
 		else
 		{
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => "搜索 $keyword-Gitty"));
 			$this->load->view('ordinary/search');
 			$this->load->view('ordinary/search_err');
 			$this->load->view('footer');

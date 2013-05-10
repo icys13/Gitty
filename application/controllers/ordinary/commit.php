@@ -183,7 +183,8 @@ class Commit extends Users {
 		}
 
 		$this->load->view('header');
-		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA));
+		$temp = $this->repository_model->select_repos($username,$reponame);
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA,'message' => $temp['description']));
 		$this->load->view('ordinary/diff_header',$data);
 		$this->load->view('ordinary/toc',array('toc' => $toc));
 		$this->load->view('ordinary/diff',array('diff' => $diff));
