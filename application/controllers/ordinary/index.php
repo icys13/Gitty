@@ -200,7 +200,7 @@ class Index extends Users {
 			foreach($users as $item)
 			{
 				$msg['users'] .= '<li><a href="'.base_url().'index.php/ordinary/index/user/'.$item['username'].'">'.$item['username'];
-				$msg['users'] .= '</a><span class="location"><i class="icon-map-marker"></i>'.$item['location'].'</span>';
+				$msg['users'] .= '</a><span class="location"><i class="icon-map-marker"></i>'.$item['location'].'</span> ';
 				$msg['users'] .= '<span class="date"><i></i>'.$item['date'].'</span></li>';
 			}
 			$msg['users'] .= '</ul>';

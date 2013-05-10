@@ -146,12 +146,12 @@ class Commit extends Users {
 					$diff .= '<td class=chunk><pre>'.$tmp[$j][0].'</pre></td></tr>';
 	
 					// 差异定位信息解析
-					$locate = explode(',',$tmp[$j][0]);
-					$remove = substr($locate[0],4);
-					$add_array = explode('+',$locate[1]);
-					$add_array1 = explode(' ',$add_array[1]);
-					$add = $add_array1[0];
-	
+					$locate = explode(' ',$tmp[$j][0]);
+					$remove_array = explode(',',substr($locate[1],1));
+					$remove = $remove_array[0];
+					$add_array = explode(',',substr($locate[2],1));
+					$add = $add_array[0];
+
 					for($k = 1;$k < $line_size;$k++)
 					{
 						if($tmp[$j][$k][0] == '+')

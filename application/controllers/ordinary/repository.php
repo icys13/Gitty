@@ -171,30 +171,99 @@ class Repository extends Users {
 
 	// 派生模块
 	// fork $username,$reponame 的项目到，当前用户的 $reponame 中
-	public function fork($username,$reponame)
+	private function db_fork($username,$reponame)
 	{
-		// 更新 repositories , forks 表
+		// fork 相关的数据库操作
+		// 更新 repositories , forks , commits , trees , blobs 表
 		$data_repos = $this->repository_model->select_repos($username,$reponame);
 		$data_forks = $this->repository_model->select_creates($username,$reponame);
+		$data_commits = $this->repository_model->select_commits($username,$reponame,TRUE);
+		$data_trees = $this->repository_model->select_trees($username,$reponame);
+		$data_blobs = $this->repository_model->select_blobs($username,$reponame);
 
-		// 更改相应的数据
+		// 更新相应的数据
+		// repositories 表
 		$data_repos['owner'] = $this->username;
-		//$data_repos['owner'] = 'Sir Alex';
 		$data_repos['creator'] = $username;
 		$data_repos['create_date'] = date("Y-m-d");
 		$data_repos['update_date'] = $data_repos['create_date'];
 
+		// forks 表
 		$data_forks['username'] = $this->username;
 		$data_forks['creator'] = $username;
 
-		// 向表中增加相应的数据
-		$this->repository_model->insert_repos($data_repos);
+		// commits 表
+		$size_commits = count($data_commits);
+		for($i = 0;$i < $size_commits;$i++)
+		{
+			$data_commits[$i]['username'] = $this->username;
+		}
+
+		// trees 表
+		$size_trees = count($data_trees);
+		for($i = 0;$i < $size_trees;$i++)
+		{
+			$data_trees[$i]['username'] = $this->username;
+		}
+
+		// blobs 表
+		$size_blobs = count($data_blobs);
+		for($i = 0;$i < $size_blobs;$i++)
+		{
+			$data_blobs[$i]['username'] = $this->username;
+		}
+
+		// 插入 repositories 表
+		$this->repository_model->insert_repos($data_repos); 
+
+		// 插入 forks 表
 		$this->repository_model->insert_forks($data_forks);
 
-		// 复制版本库
-		//
-		// 跳转到个人主页
-		redirect(site_url().'/ordinary/index');
+		// 插入 commits 表
+		for($i = 0;$i < $size_commits;$i++)
+		{
+			$this->repository_model->insert_commits($data_commits[$i],TRUE);
+		}
+
+		// 插入 trees 表
+		for($i = 0;$i < $size_trees;$i++)
+		{
+			$this->repository_model->insert_trees($data_trees[$i]);
+		}
+
+		// 插入 blobs 表
+		for($i = 0;$i < $size_blobs;$i++)
+		{
+			$this->repository_model->insert_blobs($data_blobs[$i]);
+		}
+
+		return TRUE;
+	}
+
+	public function fork($username,$reponame)
+	{
+		// 更新数据库
+		if($this->db_fork($username,$reponame))
+		{
+
+			// 复制版本库
+			exec("./scripts/cp.sh $username $reponame $this->username");
+
+			// 修改 gitosis.conf 文件
+			// 将当前用户对项目的权限设为可写
+			$this->load->helper('file');
+			$tmp = "\n[group ".strtotime("now")."]\nnumbers = ".$this->username."\nwritable = ".$this->username.'@'.$reponame."\n";
+			write_file('./gitosis-conf/gitosis-admin/gitosis.conf',$tmp,'a+');
+
+			// 跳转到当前用户派生项目主页
+			redirect(site_url().'/ordinary/repository/index/'.$this->username.'/'.$reponame);
+		}
+		else
+		{
+			// 数据库更新失败
+			// 不调转
+			redirect(site_url().'/ordinary/repository/index/'.$username.'/'.$reponame);
+		}
 	}
 
 	// 下载模块

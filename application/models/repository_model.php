@@ -67,11 +67,35 @@ class Repository_model extends CI_Model {
 	}
 
 	// 查询提交历史
-	public function select_commits($username,$reponame)
+	public function select_commits($username,$reponame,$fork='')
 	{
-		$this->db->select('date,committer,message,commit');
-		$this->db->order_by('date','desc');
-		$query = $this->db->get_where('commits',array('username' => $username,'repo_name' => $reponame));
+		if(empty($fork))
+		{
+			$this->db->select('date,committer,message,commit');
+			$this->db->order_by('date','desc');
+			$query = $this->db->get_where('commits',array('username' => $username,'repo_name' => $reponame));
+			$result = $query->result_array();
+		}
+		else
+		{
+			$query = $this->db->get_where('commits',array('username' => $username,'repo_name' => $reponame));
+			$result = $query->result_array();
+		}
+		return $result;
+	}
+	// 查询 tree 对象
+	public function select_trees($username,$reponame)
+	{
+		$query = $this->db->get_where('trees',array('username' => $username,'repo_name' => $reponame));
+		$result = $query->result_array();
+		return $result;
+	}
+	
+
+	// 查询 blob 对象
+	public function select_blobs($username,$reponame)
+	{
+		$query = $this->db->get_where('blobs',array('username' => $username,'repo_name' => $reponame));
 		$result = $query->result_array();
 		return $result;
 	}
@@ -205,9 +229,12 @@ class Repository_model extends CI_Model {
 	}
 
 	// 插入 commits 表
-	public function insert_commits($data)
+	public function insert_commits($data,$fork='')
 	{
-		$data['date'] = date("Y-m-d H:i:s",$data['date']); 
+		if(empty($fork))
+		{
+			$data['date'] = date("Y-m-d H:i:s",$data['date']); 
+		}
 		$query = $this->db->insert_string('commits',$data);
 		$this->db->query($query);
 	}
