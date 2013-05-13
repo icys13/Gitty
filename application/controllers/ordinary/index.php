@@ -15,51 +15,55 @@ class Index extends Users {
 	{
 		$msg1 = $this->show_profile($this->username);
 		$msg1['username'] = $this->username;
+		$msg1['flag'] = TRUE;
 
 		$creates = $this->show_creates($this->username);
+		$msg2['creates']['count'] = count($creates);
 		if(count($creates))
 		{
-			$msg2['creates'] = '';
+			$msg2['creates']['data'] = '';
 			foreach($creates as $item)
 			{
-				$msg2['creates'] .= '<div class="repo">';
-				$msg2['creates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
-				$msg2['creates'] .= '<p class="desc">'.$item['description'].'</p>';
-				$msg2['creates'] .= '<p class="updated-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
+				$msg2['creates']['data'] .= '<div class="repo">';
+				$msg2['creates']['data'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['creates']['data'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['creates']['data'] .= '<p class="updated-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
 			}
 		}
 		else
-			$msg2['creates'] = '<p class="repo-nothing">没有项目</p>';
+			$msg2['creates']['data'] = '<p class="repo-nothing">没有项目</p>';
 
 		$forks = $this->show_forks($this->username);
+		$msg2['forks']['count'] = count($forks);
 		if(count($forks))
 		{
-			$msg2['forks'] = '';
+			$msg2['forks']['data'] = '';
 			foreach($forks as $item)
 			{
-				$msg2['forks'] .= '<div class="repo">';
-				$msg2['forks'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['owner'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'-------克隆于'.$item['creator'].'</a></h5></div></div>';
-				$msg2['forks'] .= '<p class="desc">'.$item['description'].'</p>';
-				$msg2['forks'] .= '<p class="updated-at"><i class="icon-time"></i>克隆于 '.$item['create_date'].',更新于'.$item['update_date'].'</p></div>';
+				$msg2['forks']['data'] .= '<div class="repo">';
+				$msg2['forks']['data'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['owner'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'-------克隆于'.$item['creator'].'</a></h5></div></div>';
+				$msg2['forks']['data'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['forks']['data'] .= '<p class="updated-at"><i class="icon-time"></i>克隆于 '.$item['create_date'].',更新于'.$item['update_date'].'</p></div>';
 			}
 		}
 		else
-			$msg2['forks'] = '<p class="repo-nothing">没有项目</p>';
+			$msg2['forks']['data'] = '<p class="repo-nothing">没有项目</p>';
 
 		$participates = $this->show_participates($this->username);
+		$msg2['participates']['count'] = count($participates);
 		if(count($participates))
 		{
-			$msg2['participates'] = '';
+			$msg2['participates']['data'] = '';
 			foreach($participates as $item)
 			{
-				$msg2['participates'] .= '<div class="repo">';
-				$msg2['participates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'-------参加于'.$item['creator'].'</a></h5></div></div>';
-				$msg2['participates'] .= '<p class="desc">'.$item['description'].'</p>';
-				$msg2['participates'] .= '<p class="updated-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于'.$item['update_date'].'</p></div>';
+				$msg2['participates']['data'] .= '<div class="repo">';
+				$msg2['participates']['data'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'-------参加于'.$item['creator'].'</a></h5></div></div>';
+				$msg2['participates']['data'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['participates']['data'] .= '<p class="updated-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于'.$item['update_date'].'</p></div>';
 			}
 		}
 		else
-			$msg2['participates'] = '<p class="repo-nothing">没有项目</p>';
+			$msg2['participates']['data'] = '<p class="repo-nothing">没有项目</p>';
 
 		$this->load->view('header',array('username' => $this->username,'title' => '欢迎来到 Gitty!'));
 		$this->load->view('ordinary/profile',$msg1);
@@ -72,51 +76,55 @@ class Index extends Users {
 	{
 		$msg1 = $this->show_profile($username);
 		$msg1['username'] = $username;
+		$msg1['flag'] = FALSE;
 
 		$creates = $this->show_creates($username);
+		$msg2['creates']['count'] = count($creates);
 		if(count($creates))
 		{
-			$msg2['creates'] = '';
+			$msg2['creates']['data'] = '';
 			foreach($creates as $item)
 			{
-				$msg2['creates'] .= '<div class="repo">';
-				$msg2['creates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
-				$msg2['creates'] .= '<p class="desc">'.$item['description'].'</p>';
-				$msg2['creates'] .= '<p class="update-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
+				$msg2['creates']['data'] .= '<div class="repo">';
+				$msg2['creates']['data'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['creates']['data'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['creates']['data'] .= '<p class="update-at"><i class="icon-time"></i>创建于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
 			}
 		}
 		else 
-			$msg2['creates'] = '<p class="repo-nothing">没有项目</p>';
+			$msg2['creates']['data'] = '<p class="repo-nothing">没有项目</p>';
 		
 		$forks = $this->show_forks($username);
+		$msg2['forks']['count'] = count($forks);
 		if(count($forks))
 		{
-			$msg2['forks'] = '';
+			$msg2['forks']['data'] = '';
 			foreach($forks as $item)
 			{
-				$msg2['forks'] .= '<div class="repo">';
-				$msg2['forks'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['owner'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'</a></h5></div></div>';
-				$msg2['forks'] .= '<p class="desc">'.$item['description'].'</p>';
-				$msg2['forks'] .= '<p class="update-at"><i class="icon-time"></i>克隆于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
+				$msg2['forks']['data'] .= '<div class="repo">';
+				$msg2['forks']['data'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['owner'].'/'.$item['repo_name'].'">'.$item['owner'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['forks']['data'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['forks']['data'] .= '<p class="update-at"><i class="icon-time"></i>克隆于 '.$item['create_date'].',更新于 '.$item['update_date'].'</p></div>';
 			}
 		}
 		else
-			$msg2['forks'] = '<p class="repo-nothing">没有项目</p>';
+			$msg2['forks']['data'] = '<p class="repo-nothing">没有项目</p>';
 
 		$participates = $this->show_participates($username);
+		$msg2['participates']['count'] = count($participates);
 		if(count($participates))
 		{
-			$msg2['participates'] = '';
+			$msg2['participates']['data'] = '';
 			foreach($participates as $item)
 			{
-				$msg2['participates'] .= '<div class="repo">';
-				$msg2['participates'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
-				$msg2['participates'] .= '<p class="desc">'.$item['description'].'</p>';
-				$msg2['participates'] .= '<p class="update-at"><i class="icon-time"></i>克隆于 '.$item['creator_date'].",更新于 ".$item['update_date'].'</p></div>';
+				$msg2['participates']['data'] .= '<div class="repo">';
+				$msg2['participates']['data'] .= '<div class="cf"><div class="repo-info"><h5><a href="'.base_url().'index.php/ordinary/repository/index/'.$item['creator'].'/'.$item['repo_name'].'">'.$item['creator'].'/'.$item['repo_name'].'</a></h5></div></div>';
+				$msg2['participates']['data'] .= '<p class="desc">'.$item['description'].'</p>';
+				$msg2['participates']['data'] .= '<p class="update-at"><i class="icon-time"></i>克隆于 '.$item['creator_date'].",更新于 ".$item['update_date'].'</p></div>';
 			}
 		}
 		else
-			$msg2['participates'] = '<p class="repo-nothing">没有项目</p>';
+			$msg2['participates']['data'] = '<p class="repo-nothing">没有项目</p>';
 
 		$this->load->view('header',array('username' => $username,'title' => '欢迎来到 Gitty!'));
 		$this->load->view('ordinary/profile',$msg1);

@@ -1,13 +1,28 @@
 <div class="main">
+	<nav class="page-nav">
+		<ul class="cf">
+			<li>
+				<a href="">项目</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="">动态</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="">关系圈</a>
+			</li>
+		</ul>
+	</nav>
 	<ul class="tabs">
-		<li class="">
-			<a data-toggle="tab" href="#creates">创建</a>
+		<li class="active">
+			<a data-toggle="tab" href="#creates">创建(<?=$creates['count']?>)</a>
 		</li>
-		<li class="">
-			<a data-toggle="tab" href="#forks">克隆</a>
+		<li>
+			<a data-toggle="tab" href="#forks">克隆(<?=$forks['count']?>)
 		</li>
-		<li class="">
-			<a data-toggle="tab" href="#participates">参与</a>
+		<li>
+			<a data-toggle="tab" href="#participates">参与(<?=$participates['count']?>)</a>
 		</li>
 	</ul>
 	<div class="profile-actions">
@@ -17,8 +32,8 @@
 		</a>
 	</div>
 	<div class="tabs-content">
-		<div id="creates"><?=$creates?></div>
-		<div id="forks"><?=$forks?></div>
-		<div id="participates"><?=$participates?></div>
+		<div class="tab-pane active" id="creates"><?=$creates['data']?></div>
+		<div class="tab-pane" id="forks"><?=$forks['data']?></div>
+		<div class="tab-pane" id="participates"><?=$participates['data']?></div>
 	</div>
 </div>
