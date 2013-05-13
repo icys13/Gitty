@@ -1,13 +1,3 @@
-<header id="header" role="banner">
-	<div class="inner cf">
-		<div class="user-nav">
-		<form accetp-charset="UTF-8" action="<?=base_url()?>index.php/ordinary/index/search" id="search-form" method="post">
-				<input id="keyword" name="keyword" placeholder="搜索 ..." type="text">
-				<button class="icon-search" type="submit">q</button>
-			</form>
-		</div>
-	</div>
-</header>
 <div class="main">
 	<ul class="tabs">
 		<li class="">

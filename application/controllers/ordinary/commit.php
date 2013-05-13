@@ -48,7 +48,7 @@ class Commit extends Users {
 		$msg['commits'] .= '</ol></div>';
 
 		// 载入模板
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $this->username,'title' => "$reponame 提交历史 - Gitty"));
 		$temp = $this->repository_model->select_repos($username,$reponame);
 		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $data[0]['commit'],'message' => $temp['description']));
 		$this->load->view('ordinary/commits',$msg);
@@ -182,7 +182,7 @@ class Commit extends Users {
 			}
 		}
 
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $this->username,'title' => "$SHA 详细信息 - Gitty"));
 		$temp = $this->repository_model->select_repos($username,$reponame);
 		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA,'message' => $temp['description']));
 		$this->load->view('ordinary/diff_header',$data);

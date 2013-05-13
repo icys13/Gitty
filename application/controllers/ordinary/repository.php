@@ -102,7 +102,7 @@ class Repository extends Users {
 					$this->repository_model->insert_latest_commit($data['table'],array('username' => $username,'repo_name' => $reponame),$latest);
 			}
 
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $username,'title' => "$reponame 项目 - Gitty"));
 
 			// 项目文件结构
 			$temp = $this->repository_model->select_repos($username,$reponame);

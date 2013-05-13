@@ -39,7 +39,7 @@ class Tree extends Users {
 				$k++;
 			}
 		}
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $this->username,'title' => "$reponame/$path 目录- Gitty"));
 		$temp = $this->repository_model->select_repos($username,$reponame);
 		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA,'message' => $temp['description']));
 		$this->load->view('ordinary/tree_browser',array('path' => $path,'trees' =>$trees,'blobs' => $blobs));

@@ -1,3 +1,4 @@
+		</div>
 		 <footer id="footer" role="contentinfo">
 			<div class="inner cf">
 				<div class="mod">
