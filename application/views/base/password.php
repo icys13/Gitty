@@ -1,6 +1,6 @@
-<h3><?php if(isset($error)) echo $error?></h3>
-<div class="module">
-	<form accept-charset="UTF-8" action="<?=base_url()?>index.php<?php if($admin) echo '/admin/index';else echo '/ordinary/index';?>/password" class="form-page form-horizontal" method="post">
+<div class="settings-main">
+	<form accept-charset="UTF-8" action="<?=base_url()?>index.php<?php if($admin) echo '/admin/index';else echo '/ordinary/index';?>/password" class="form-horizontal" method="post">
+		<h3><?php if(isset($error)) echo $error;?></h3>
 		<div class="control-group">
 			<label class="control-label" for="old_pwd">旧密码</label>
 			<div class="controls">
@@ -24,3 +24,6 @@
 		</div>
 	</form>
 </div>
+</div>
+</div>
+<h3><?php if(isset($error)) echo $error?></h3>

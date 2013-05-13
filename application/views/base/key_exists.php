@@ -1,6 +1,5 @@
-<div class="module settings-content">
-	<div class="module-bd settings-inner cf">
 		<div class="settings-main">
+			<div class="fl">
 			<div class="controls-group">
 				<label class="control-label" for="username">用户名</label>
 				<div class="controls">
@@ -17,6 +16,7 @@
 				<div controls="controls">
 					<a class="add-key" href="<?=base_url()?>index.php<?php if($admin) echo '/admin/index'; else echo '/ordinary/index'?>/del_key/<?=$username?>">删除</a>
 				</div>
+			</div>
 			</div>
 		</div>
 	</div>
