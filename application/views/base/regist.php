@@ -31,7 +31,7 @@
 			</div>
 			<div class="form-actions">
 				<input class="btn btn-large btn primary" name="commit" type="submit" value="注册">
-				<p class="help-block">已有账户?<a href="">登入</a></p>
+				<p class="help-block">已有账户?<a href="<?=base_url()?>index.php/base/signup">登入</a></p>
 			</div>	
 		</form>
 	</div>

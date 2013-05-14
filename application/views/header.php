@@ -52,6 +52,13 @@
 										<i class="icon-new-repo"></i>创建项目
 									</a>
 								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="<?=base_url()?>index.php/ordinary/index/signout">
+										<i class="icon-signout"></i>
+										登出
+									</a>
+								</li>
 							</ul>
 						</li>
 					</ul>

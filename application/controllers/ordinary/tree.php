@@ -10,14 +10,15 @@ class Tree extends Users {
 		$this->load->model('repository_model');
 	}
 
-	public function index($username,$reponame,$SHA,$path,$dir_name='')
+	public function index($username,$reponame,$SHA)
 	{
 		$data = array();
 		$blobs = array();
 		$trees = array();
 		$file = '';
+		$dir_name = $this->input->get('dir_name');
 		if(!empty($dir_name))
-			$path .= '/'.$dir_name;
+			$path = $this->input->get('path').'/'.$dir_name;
 		exec("./scripts/ls-tree.sh $username $reponame $SHA",$data);
 		$size = count($data);	
 		$i = 0;$j = 0;$k = 0;
@@ -42,7 +43,7 @@ class Tree extends Users {
 		$this->load->view('header',array('username' => $this->username,'title' => "$reponame/$path 目录- Gitty"));
 		$temp = $this->repository_model->select_repos($username,$reponame);
 		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA,'message' => $temp['description']));
-		$this->load->view('ordinary/tree_browser',array('path' => $path,'trees' =>$trees,'blobs' => $blobs));
+		$this->load->view('ordinary/tree_browser',array('path' => $path,'trees' =>$trees,'blobs' => $blobs,'SHA' => $SHA));
 
 		// 代码首页,查找 README.md 文件,如果查找到则显示
 		if($this->input->get('home') == true)
@@ -52,6 +53,9 @@ class Tree extends Users {
 			else
 			{
 				$result = $this->markdown($username,$reponame,$file);
+				$result['username'] = $username;
+				$result['reponame'] = $reponame;
+				$result['SHA'] = $file;
 				$this->load->view('ordinary/preview',$result);
 			}
 		}

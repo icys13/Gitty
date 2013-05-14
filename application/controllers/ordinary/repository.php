@@ -26,7 +26,7 @@ class Repository extends Users {
 			$temp = $this->user_model->select_email($username);
 			$msg['email'] = $temp['email'];
 			$msg['repo_name'] = $reponame;
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => "$reponame Empty - Gitty"));
 			$this->load->view('ordinary/guide',$msg);
 			$this->load->view('footer');
 		}
@@ -119,10 +119,19 @@ class Repository extends Users {
 			if(!empty($preview))
 			{
 				$temp = array();
-				$msg['file'] = '';
+				$msg['code'] = '';
+				$msg['line'] = '';
+				$msg['username'] = $username;
+				$msg['reponame'] = $reponame;
+				$msg['SHA'] = $preview['SHA'];
 				exec("./scripts/cat-file.sh $username $reponame -p {$preview['SHA']}",$temp);
+				$i = 0;
 				foreach($temp as $item)
-					$msg['file'] .= $item.'<br/>';
+				{
+					$msg['code'] .= $item.'<br/>';
+					$msg['line'] .= $i.'<br/>';
+					$i++;
+				}
 				$this->load->view('ordinary/preview',$msg);
 			}
 			else

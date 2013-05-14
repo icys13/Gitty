@@ -229,6 +229,13 @@ class Users extends Authorization {
 			echo $img['img'];
 		}
 	}
+
+	// 退出
+	public function signout()
+	{
+		$this->session->unset_userdata(array('username' => '','log_in' => '','admin' => ''));
+		redirect(base_url().'index.php');
+	}
 }
 
 /* End of file users.php */

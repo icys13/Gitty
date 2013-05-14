@@ -5,3 +5,7 @@
 		<h2><?=$error?></h2>
 	</article>
 </div>
+</div>
+</div>
+</div>
+</div>
