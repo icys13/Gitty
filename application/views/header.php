@@ -37,18 +37,18 @@
 							<a class="dropdown-toggle" href="<?=base_url()?>index.php/ordinary/index/user/<?=$username?>"><?=$username?><i class="arrow"></i></a>
 							<ul class="dropdown-menu">
 								<li>
-									<a class="menu-profile" href="">
+									<a class="menu-profile" href="<?=base_url()?>index.php/ordinary/index">
 										<i class="icon-profile"></i>个人主页
 									</a>
 								</li>
 								<li>
-									<a href="">
+									<a href="<?=base_url()?>index.php/ordinary/index/account">
 										<i class="icon-settings-alt"></i>账户设置
 									</a>
 								</li>
 								<li class="divider"></li>
 								<li>
-									<a href="">
+									<a href="<?=base_url()?>index.php/ordinary/index/create_repo">
 										<i class="icon-new-repo"></i>创建项目
 									</a>
 								</li>

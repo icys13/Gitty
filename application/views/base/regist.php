@@ -1,5 +1,9 @@
 <h3><?php if(isset($error)) echo $error?></h3>
-<div class="module">
+<div class="module" id="regist">
+<header class="module-hd">
+	<h1>注册 Gitty</h1>
+</header>
+<div class="module-bd">
 <form accetp-charset="UTF-8" action="<?=base_url()?>index.php/base/regist" class="form-page form-horizontal" id="new_user" method="post">
 			<div class="control-group">
 				<label class="control-label" for="user_email">邮箱</label>
@@ -31,4 +35,5 @@
 			</div>	
 		</form>
 	</div>
+</div>
 </div>

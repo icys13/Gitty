@@ -65,6 +65,7 @@ class Index extends Users {
 		else
 			$msg2['participates']['data'] = '<p class="repo-nothing">没有项目</p>';
 
+		$msg1['repos_num'] = $msg2['creates']['count'] + $msg2['forks']['count'] + $msg2['participates']['count'];
 		$this->load->view('header',array('username' => $this->username,'title' => '欢迎来到 Gitty!'));
 		$this->load->view('ordinary/profile',$msg1);
 		$this->load->view('ordinary/repo',$msg2);
@@ -126,6 +127,7 @@ class Index extends Users {
 		else
 			$msg2['participates']['data'] = '<p class="repo-nothing">没有项目</p>';
 
+		$msg1['repos_num'] = $msg2['creates']['count'] + $msg2['forks']['count'] + $msg2['participates']['count'];
 		$this->load->view('header',array('username' => $username,'title' => '欢迎来到 Gitty!'));
 		$this->load->view('ordinary/profile',$msg1);
 		$this->load->view('ordinary/repo',$msg2);

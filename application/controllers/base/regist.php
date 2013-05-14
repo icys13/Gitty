@@ -32,7 +32,7 @@ class Regist extends CI_Controller {
 
 		if($this->user_model->is_empty($data))
 		{
-			$this->load->view('header');
+			$this->load->view('base/header_sign',array('title' => '注册 - Gitty'));
 			$this->load->view('base/regist');
 			$this->load->view('footer');
 		 }
@@ -46,7 +46,7 @@ class Regist extends CI_Controller {
 			}
 			else
 			{
-				$this->load->view('header');
+				$this->load->view('base/header_sign',array('title' => '注册 - Gitty'));
 				$this->load->view('base/regist',$msg);
 				$this->load->view('footer');
 			}

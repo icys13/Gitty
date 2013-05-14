@@ -10,7 +10,7 @@
 		</header>
 		<div class="info">
 			<ul class="stats cf">
-				<li><a href=""><strong>0</strong>公开项目</a></li>
+				<li><a href=""><strong><?=$repos_num?></strong>公开项目</a></li>
 				<li><a href=""><strong>0</strong>粉丝</a></li>
 				<li><a href=""><strong>0</strong>关注</a></li>
 			</ul>

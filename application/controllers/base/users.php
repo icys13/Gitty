@@ -18,7 +18,7 @@ class Users extends Authorization {
 	 *	用户信息更新.
 	 *	只更新用户全名及位置信息.
 	 */
-	public function profile()
+	public function account()
 	{
 		$data['full_name'] = $this->input->post('full_name');
 		$data['location'] = $this->input->post('location');
@@ -42,8 +42,9 @@ class Users extends Authorization {
 		$msg['full_name'] = $this->user_model->select_full_name($this->username);
 		$msg['location'] = $this->user_model->select_location($this->username);
 
-		$this->load->view('header');
-		$this->load->view('base/profile',$msg);
+		$this->load->view('header',array('username' => $this->username,'title' => '账户设置 - Gitty'));
+		$this->load->view('base/settings_header');
+		$this->load->view('base/account',$msg);
 		$this->load->view('footer');
 	}
 
@@ -79,7 +80,8 @@ class Users extends Authorization {
 		}
 
 		$msg['admin'] = $this->session->userdata('admin');
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $this->username,'title' => '修改密码 - Gitty'));
+		$this->load->view('base/settings_header');
 		$this->load->view('base/password',$msg);
 		$this->load->view('footer');
 	}
@@ -101,7 +103,9 @@ class Users extends Authorization {
 
 		$msg['data'] = $this->user_model->select_email($this->username);
 		$msg['admin'] = $this->session->userdata('admin');
-		$this->load->view('header');
+
+		$this->load->view('header',array('username' => $this->username,'title' => '修改email - Gitty'));
+		$this->load->view('base/settings_header');
 		$this->load->view('base/email',$msg);
 		$this->load->view('footer');
 	}
@@ -113,7 +117,8 @@ class Users extends Authorization {
 		$msg['admin'] = $this->session->userdata('admin');
 		if(empty($data['ssh_key']))
 		{
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => '添加ssh-key - Gitty'));
+			$this->load->view('base/settings_header');
 			$this->load->view('base/key_empty',$msg);
 			$this->load->view('footer');
 		}
@@ -121,7 +126,8 @@ class Users extends Authorization {
 		{
 			$msg['ssh_key'] = $data['ssh_key'];
 			$msg['username'] = $this->username;
-			$this->load->view('header');
+			$this->load->view('header',array('username' => $this->username,'title' => '编辑ssh-key - Gitty'));
+			$this->load->view('base/settings_header');
 			$this->load->view('base/key_exists',$msg);
 			$this->load->view('footer');
 		}

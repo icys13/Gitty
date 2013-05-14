@@ -47,14 +47,14 @@ class Signup extends CI_Controller {
 			}
 			else
 			{
-				$this->load->view('header');
+				$this->load->view('base/header_sign',array('title' => '登录 - Gitty'));
 				$this->load->view('base/signup',$msg['remind']);
 				$this->load->view('footer');
 			}
 		}
 		else
 		{
-			$this->load->view('header');
+			$this->load->view('base/header_sign',array('title' => '登录 - Gitty'));
 			$this->load->view('base/signup');
 			$this->load->view('footer');
 		}

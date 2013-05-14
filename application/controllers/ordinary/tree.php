@@ -50,7 +50,10 @@ class Tree extends Users {
 			if(empty($file))
 				$this->load->view('ordinary/no_file',array('error' => 'README.md还没有编辑,立即编辑README.md。'));
 			else
-				$this->load->view('ordinary/preview',array('file' => $this->markdown($username,$reponame,$file)));
+			{
+				$result = $this->markdown($username,$reponame,$file);
+				$this->load->view('ordinary/preview',$result);
+			}
 		}
 		else
 			$this->load->view('ordinary/no_file',array('error' => '请在左边栏选择文件或文件夹。'));
@@ -61,11 +64,17 @@ class Tree extends Users {
 	// 获取 
 	private function markdown($username,$reponame,$SHA)
 	{
-		$result = '';
+		$result['line'] = '';
+		$result['code'] = '';
 		$data = array();
 		exec("./scripts/cat-file.sh $username $reponame -p $SHA",$data);
+		$i = 1;
 		foreach($data as $item)
-			$result .= $item.'<br/>';
+		{
+			$result['code'] .= $item.'<br/>';
+			$result['line'] .= $i.'<br/>';
+			$i++;
+		}
 		return $result;
 	}
 }

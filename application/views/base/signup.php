@@ -1,5 +1,9 @@
 <h3><?php if(isset($error)) echo $error?></h3>
-<div class="module">
+ <div class="module" id="signin">
+	<header class="module-hd">
+		<h1>登入 Gitty</h1>
+	</header>
+	<div class="module-bd">
 	<form accept-charset="UTF-8" action="<?=base_url()?>index.php/base/signup" class="form-page form-horizontal" method="post">
 		<div class="control-group">
 			<label class="control-label" for="username">用户名</label>
@@ -18,4 +22,6 @@
 			<a class="btn btn-large btn-primary" href="<?=base_url()?>index.php/base/regist">注册</a>
 		</div>
 	</form>
+</div>
+</div>
 </div>

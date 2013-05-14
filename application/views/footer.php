@@ -13,7 +13,7 @@
 				</div>
 				<div class="mod">
 					<h4>语言</h4>
-					<li><a href="">简体中文</a></li>
+					<l><a href="">简体中文</a></li>
 					<li><a href="">繁體中文</a></li>
 					<li><a href="">English</a></li>
 				</div>

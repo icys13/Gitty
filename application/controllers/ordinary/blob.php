@@ -12,13 +12,22 @@ class Blob extends Users {
 	public function index($username,$reponame,$SHA,$path,$file_name)
 	{
 		$data = array();
-		$result = array();
+		$result['line'] = '';
+		$result['code'] = '';
 		$path .= ' / '.$file_name;
 		exec("./scripts/cat-file.sh $username $reponame -p $SHA",$data);
+		$i = 1;
 		foreach($data as $item)
-			echo $item.'<br/>';
-	//		$result .= $item.'<br/>';
-	//	print_r($result);
+		{
+			$result['line'] .= $i.'<br/>';
+			$result['code'] .= $item.'<br/>';
+			$i++;
+		}
+		$this->load->view('header',array('username' => $this->username,'title' => "$username/$reponame - Gitty"));
+		$this->load->view('ordinary/repo_header',array('username' => $username,'repo_name' => $reponame,'SHA' => $SHA,'message' => ''));
+		//$this->load->view('ordinary/tree_browser');
+		$this->load->view('ordinary/preview',$result);
+		$this->load->view('footer');
 	}
 }
 
