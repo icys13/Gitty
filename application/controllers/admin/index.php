@@ -25,7 +25,7 @@ class Index extends Users {
 			$msg['regist_status'] = '已关闭注册<a href="'.base_url().'index.php/admin/index/open_regist">开启</a>';
 		}
 
-		$this->load->view('header');
+		$this->load->view('header',array('username' => $this->username,'title' => "管理员首页 - Gitty"));
 		$this->load->view('admin/index',$msg);
 		$this->load->view('footer');
 	}	

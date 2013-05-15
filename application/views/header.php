@@ -11,7 +11,7 @@
 		<header id="header" role="banner">
 			<div class="inner cf">
 				<a href="<?=base_url()?>" class="logo">
-					<img alt="Gitty" height="86" width="130"src="./assets/logo.png">
+				<img alt="Gitty" height="86" width="130"src="<?=base_url()?>assets/img/gitty.png">
 				</a>
 				<span class="slogan">Enjoy your talent coding ^_^</span>
 				<nav class="top-nav">

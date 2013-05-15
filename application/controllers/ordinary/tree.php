@@ -19,6 +19,8 @@ class Tree extends Users {
 		$dir_name = $this->input->get('dir_name');
 		if(!empty($dir_name))
 			$path = $this->input->get('path').'/'.$dir_name;
+		else
+			$path = $reponame;
 		exec("./scripts/ls-tree.sh $username $reponame $SHA",$data);
 		$size = count($data);	
 		$i = 0;$j = 0;$k = 0;
