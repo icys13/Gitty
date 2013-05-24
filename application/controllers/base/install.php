@@ -27,7 +27,9 @@ class Install extends CI_Controller {
 		}
 		else
 		{
+			$this->load->view('base/header_sign',array('title' => '安装 - Gitty'));
 			$this->load->view('base/readme',$msg['remind']);
+			$this->load->view('footer');
 		}
 	}
 
@@ -48,12 +50,16 @@ class Install extends CI_Controller {
 			// 创建成功
 			$msg['error'] = '默认 username:admin<br/>password:123456<br/>email:amdin@admin.com<br/>';
 			$msg['link'] = '<a class="btn btn-large btn-primary" href="'.base_url().'index.php/base/signup">点此登录</a>';
+			$this->load->view('base/header_sign',array('title' => '安装成功 - Gitty'));
 			$this->load->view('base/readme',$msg);
-			//redirect(site_url('base/regist'));
 		}
 		else
+		{
 			//建立不成功
+			$this->load->view('base/header_sign',array('title' => '安装失败 - Gitty'));
 			$this->load->view('base/readme',$msg['remind']);
+		}
+		$this->load->view('footer');
 	}
 
 }

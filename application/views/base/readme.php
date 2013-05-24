@@ -1,21 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-</head>
-<body>
+<div class="repo-init module">
+	<div class="repo-init-content module-bd">
 <?php
-echo $error;
+echo '<span style="color:red">'.$error.'</span>';
 if(isset($cover))
 {
 	if($cover)
 	{
-		echo '<input type="button" value="确定" onclick="window.location=\''.site_url('base/install/action').'\'"';
-	//	echo '<input type="button" value="asdf" onclick="window.location=\'http://baidu.com\'">';
+		echo '<input class="btn btn-large btn-primary" type="button" value="确定" onclick="window.location=\''.site_url('base/install/action').'\'"';
 	}
 }
 if(isset($link))
-	echo $link;
+	echo '<h3>'.$link.'</h3>';
 ?>
-</body>
-</html>
+</div>
+</div>
